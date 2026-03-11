@@ -50,9 +50,19 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
   const [authors, setAuthors] = useState<AuthorData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [viewportWidth, setViewportWidth] = useState(() => window.innerWidth);
   const teamCarouselConfig = getTeamCarouselConfig();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
+  useEffect(() => {
+    const handleResize = () => setViewportWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const facultyGridColumns = viewportWidth >= 350 ? 2 : 1;
+  const memberGridColumns = viewportWidth >= 1100 ? 3 : viewportWidth >= 350 ? 2 : 1;
 
   // 轮播图自动播放
   useEffect(() => {
@@ -213,7 +223,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
           <div className="mb-16">
             <h3 className="text-2xl mb-8 text-white text-center">{t('team.faculty')}</h3>
             
-            <div className="grid grid-cols-2 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            <div className="grid gap-6 max-w-4xl mx-auto" style={{ gridTemplateColumns: `repeat(${facultyGridColumns}, minmax(0, 1fr))` }}>
               {faculty.map((member) => (
                 <Card key={member.id} className="bg-slate-800/40 border-slate-600/30 hover:bg-slate-800/60 hover:border-slate-500/50 transition-all duration-300 cursor-pointer group rounded-xl shadow-none">
                   <CardContent className="p-4 text-center">
@@ -246,7 +256,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
                       variant="outline"
                       size="sm"
                       onClick={() => onMemberClick?.(member)}
-                      className="group-hover:bg-orange-500 group-hover:text-white transition-colors text-xs px-3 py-1 h-7"
+                      className="text-xs px-3 py-1 h-7 border-white/20 bg-white/5 text-white/85 hover:bg-white/10 hover:text-white hover:opacity-100 opacity-80 transition-all duration-300 group-hover:opacity-100 group-hover:-translate-y-0.5"
                     >
                       {t('team.viewProfile')}
                     </Button>
@@ -262,7 +272,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
           <div className="mb-16">
             <h3 className="text-2xl mb-8 text-white text-center">{t('team.phd')}</h3>
             
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${memberGridColumns}, minmax(0, 1fr))` }}>
               {phdStudents.map((student) => (
                 <Card key={student.id} className="bg-slate-800/40 border-slate-600/30 hover:bg-slate-800/60 hover:border-slate-500/50 transition-all duration-300 cursor-pointer group rounded-xl shadow-none">
                   <CardContent className="p-4 text-center">
@@ -284,7 +294,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
                       variant="outline"
                       size="sm"
                       onClick={() => onMemberClick?.(student)}
-                      className="group-hover:bg-orange-500 group-hover:text-white transition-colors text-xs px-3 py-1 h-7"
+                      className="text-xs px-3 py-1 h-7 border-white/20 bg-white/5 text-white/85 hover:bg-white/10 hover:text-white hover:opacity-100 opacity-80 transition-all duration-300 group-hover:opacity-100 group-hover:-translate-y-0.5"
                     >
                       {t('team.viewProfile')}
                     </Button>
@@ -300,7 +310,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
           <div className="mb-16">
             <h3 className="text-2xl mb-8 text-white text-center">{t('team.master')}</h3>
             
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${memberGridColumns}, minmax(0, 1fr))` }}>
               {masterStudents.map((student) => (
                 <Card key={student.id} className="bg-slate-800/40 border-slate-600/30 hover:bg-slate-800/60 hover:border-slate-500/50 transition-all duration-300 cursor-pointer group rounded-xl shadow-none">
                   <CardContent className="p-4 text-center">
@@ -322,7 +332,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
                       variant="outline"
                       size="sm"
                       onClick={() => onMemberClick?.(student)}
-                      className="group-hover:bg-orange-500 group-hover:text-white transition-colors text-xs px-3 py-1 h-7"
+                      className="text-xs px-3 py-1 h-7 border-white/20 bg-white/5 text-white/85 hover:bg-white/10 hover:text-white hover:opacity-100 opacity-80 transition-all duration-300 group-hover:opacity-100 group-hover:-translate-y-0.5"
                     >
                       {t('team.viewProfile')}
                     </Button>
@@ -338,7 +348,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
           <div className="mb-16">
             <h3 className="text-2xl mb-8 text-white text-center">{t('team.researchAssociates')}</h3>
             
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${memberGridColumns}, minmax(0, 1fr))` }}>
               {researchAssociates.map((associate) => (
                 <Card key={associate.id} className="bg-slate-800/40 border-slate-600/30 hover:bg-slate-800/60 hover:border-slate-500/50 transition-all duration-300 cursor-pointer group rounded-xl shadow-none">
                   <CardContent className="p-4 text-center">
@@ -360,7 +370,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
                       variant="outline"
                       size="sm"
                       onClick={() => onMemberClick?.(associate)}
-                      className="group-hover:bg-orange-500 group-hover:text-white transition-colors text-xs px-3 py-1 h-7"
+                      className="text-xs px-3 py-1 h-7 border-white/20 bg-white/5 text-white/85 hover:bg-white/10 hover:text-white hover:opacity-100 opacity-80 transition-all duration-300 group-hover:opacity-100 group-hover:-translate-y-0.5"
                     >
                       {t('team.viewProfile')}
                     </Button>
@@ -376,7 +386,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
           <div className="mb-16">
             <h3 className="text-2xl mb-8 text-white text-center">{t('team.adminAssistants')}</h3>
             
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${memberGridColumns}, minmax(0, 1fr))` }}>
               {administrativeAssistants.map((assistant) => (
                 <Card key={assistant.id} className="bg-slate-800/40 border-slate-600/30 hover:bg-slate-800/60 hover:border-slate-500/50 transition-all duration-300 cursor-pointer group rounded-xl shadow-none">
                   <CardContent className="p-4 text-center">
@@ -398,7 +408,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
                       variant="outline"
                       size="sm"
                       onClick={() => onMemberClick?.(assistant)}
-                      className="group-hover:bg-orange-500 group-hover:text-white transition-colors text-xs px-3 py-1 h-7"
+                      className="text-xs px-3 py-1 h-7 border-white/20 bg-white/5 text-white/85 hover:bg-white/10 hover:text-white hover:opacity-100 opacity-80 transition-all duration-300 group-hover:opacity-100 group-hover:-translate-y-0.5"
                     >
                       {t('team.viewProfile')}
                     </Button>
@@ -414,7 +424,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
           <div className="mb-16">
             <h3 className="text-2xl mb-8 text-white text-center">{t('team.others')}</h3>
             
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${memberGridColumns}, minmax(0, 1fr))` }}>
               {others.map((member) => (
                 <Card key={member.id} className="bg-slate-800/40 border-slate-600/30 hover:bg-slate-800/60 hover:border-slate-500/50 transition-all duration-300 cursor-pointer group rounded-xl shadow-none">
                   <CardContent className="p-4 text-center">
@@ -436,7 +446,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
                       variant="outline"
                       size="sm"
                       onClick={() => onMemberClick?.(member)}
-                      className="group-hover:bg-orange-500 group-hover:text-white transition-colors text-xs px-3 py-1 h-7"
+                      className="text-xs px-3 py-1 h-7 border-white/20 bg-white/5 text-white/85 hover:bg-white/10 hover:text-white hover:opacity-100 opacity-80 transition-all duration-300 group-hover:opacity-100 group-hover:-translate-y-0.5"
                     >
                       {t('team.viewProfile')}
                     </Button>

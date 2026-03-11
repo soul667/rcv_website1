@@ -6,6 +6,7 @@ import { BackButton } from './BackButton';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import { useEffect, useState } from 'react';
 
 interface MemberProfileProps {
   member: {
@@ -43,6 +44,12 @@ interface YouTubeEmbedProps {
   title: string;
 }
 
+type SocialLink = {
+  icon: string;
+  icon_pack: string;
+  link: string;
+};
+
 const YouTubeEmbed = ({ videoId, title }: YouTubeEmbedProps) => (
   <div className="my-8">
     <div 
@@ -78,9 +85,78 @@ const parseShortcodes = (content: string): string => {
   );
 };
 
+const extractSocialLinksFromFrontmatter = (content: string): SocialLink[] => {
+  const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
+  if (!frontmatterMatch) return [];
+
+  const lines = frontmatterMatch[1].split('\n');
+  const socialIndex = lines.findIndex((line) => line.trim() === 'social:');
+  if (socialIndex < 0) return [];
+
+  const socialItems: SocialLink[] = [];
+  let currentItem: Partial<SocialLink> | null = null;
+
+  const assignKeyValue = (yamlLine: string, target: Partial<SocialLink>) => {
+    const keyValue = yamlLine.match(/^\s*([A-Za-z_][\w-]*)\s*:\s*(.+)\s*$/);
+    if (!keyValue) return;
+    const key = keyValue[1] as 'icon' | 'icon_pack' | 'link';
+    const value = keyValue[2].replace(/^["']|["']$/g, '').trim();
+    if (key === 'icon' || key === 'icon_pack' || key === 'link') {
+      target[key] = value;
+    }
+  };
+
+  for (let i = socialIndex + 1; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    if (!trimmed) continue;
+    if (/^[A-Za-z_][\w-]*\s*:/.test(trimmed) && !line.startsWith(' ')) break;
+
+    if (/^\s*-\s+/.test(line)) {
+      if (currentItem?.link) {
+        socialItems.push({
+          icon: currentItem.icon || 'globe',
+          icon_pack: currentItem.icon_pack || 'fas',
+          link: currentItem.link,
+        });
+      }
+
+      currentItem = {};
+      assignKeyValue(line.replace(/^\s*-\s+/, ''), currentItem);
+      continue;
+    }
+
+    if (currentItem) {
+      assignKeyValue(line, currentItem);
+    }
+  }
+
+  if (currentItem?.link) {
+    socialItems.push({
+      icon: currentItem.icon || 'globe',
+      icon_pack: currentItem.icon_pack || 'fas',
+      link: currentItem.link,
+    });
+  }
+
+  return socialItems;
+};
+
+const normalizeSocialLinks = (social: Array<Partial<SocialLink>> = []): SocialLink[] => {
+  return social
+    .filter((item) => typeof item?.link === 'string' && item.link.trim())
+    .map((item) => ({
+      icon: item.icon?.trim() || 'globe',
+      icon_pack: item.icon_pack?.trim() || 'fas',
+      link: item.link!.trim(),
+    }));
+};
+
 export function MemberProfile({ member, onBack }: MemberProfileProps) {
   const { language, t } = useLanguage();
   const { navigateTo } = useRouter();
+  const [resolvedSocialLinks, setResolvedSocialLinks] = useState<SocialLink[]>(() => normalizeSocialLinks(member.social));
 
   const handleBack = () => {
     navigateTo('team');
@@ -121,8 +197,37 @@ export function MemberProfile({ member, onBack }: MemberProfileProps) {
     return 'Website';
   };
 
-  const socialLinks = (member.social || []).filter((item) => item?.link);
-  const hasEmailInSocial = socialLinks.some((item) => item.icon?.trim().toLowerCase() === 'envelope');
+  useEffect(() => {
+    setResolvedSocialLinks(normalizeSocialLinks(member.social));
+  }, [member]);
+
+  useEffect(() => {
+    if (resolvedSocialLinks.length > 0) return;
+
+    let isCancelled = false;
+    const loadSocialFromMarkdown = async () => {
+      try {
+        const response = await fetch(`/content/authors/${member.id}/_index.md`);
+        if (!response.ok) return;
+
+        const content = await response.text();
+        const extracted = extractSocialLinksFromFrontmatter(content);
+        if (!isCancelled && extracted.length > 0) {
+          setResolvedSocialLinks(normalizeSocialLinks(extracted));
+        }
+      } catch (error) {
+        // Ignore fallback fetch errors to keep profile rendering stable.
+      }
+    };
+
+    loadSocialFromMarkdown();
+    return () => {
+      isCancelled = true;
+    };
+  }, [member.id, resolvedSocialLinks.length]);
+
+  const socialLinks = resolvedSocialLinks;
+  const hasEmailInSocial = socialLinks.some((item) => item.icon.toLowerCase() === 'envelope');
 
   return (
     <div className="min-h-screen bg-slate-900 py-20">
@@ -133,12 +238,12 @@ export function MemberProfile({ member, onBack }: MemberProfileProps) {
         {/* Header */}
         <div className="flex flex-col lg:flex-row gap-8 mb-12">
           <div className="lg:w-1/3">
-              <ImageWithFallback
-                src={member.image}
-                alt={member.name}
-                className="w-44 h-44 sm:w-56 sm:h-56 rounded-full object-cover mx-auto ring-2 ring-slate-600/50"
-                loading="lazy"
-              />
+            <ImageWithFallback
+              src={member.image}
+              alt={member.name}
+              className="w-full max-w-sm mx-auto rounded-lg object-cover aspect-square"
+              loading="lazy"
+            />
           </div>
           
           <div className="lg:w-2/3 text-white">
@@ -164,16 +269,16 @@ export function MemberProfile({ member, onBack }: MemberProfileProps) {
                  const IconComponent = getSocialIcon(item.icon);
                  const isMail = item.link.startsWith('mailto:');
                  return (
-                 <a
-                   key={`${item.icon}-${index}`}
-                   href={item.link}
-                   target={isMail ? undefined : '_blank'}
-                   rel={isMail ? undefined : 'noopener noreferrer'}
-                   className="flex items-center gap-2 px-3 py-2 rounded-full border border-slate-600/60 bg-slate-800/40 text-gray-200 hover:border-orange-400/60 hover:text-white hover:bg-slate-700/50 transition-all"
-                 >
-                   <IconComponent className="h-4 w-4" />
-                   <span>{getSocialLabel(item.icon, item.link)}</span>
-                 </a>
+                  <a
+                    key={`${item.icon}-${index}`}
+                    href={item.link}
+                    target={isMail ? undefined : '_blank'}
+                    rel={isMail ? undefined : 'noopener noreferrer'}
+                    className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors"
+                  >
+                    <IconComponent className="h-4 w-4" />
+                    <span>{getSocialLabel(item.icon, item.link)}</span>
+                  </a>
                  );
                })}
              </div>

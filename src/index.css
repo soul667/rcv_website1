@@ -2340,6 +2340,8 @@
 :root {
   --font-size: 16px;
   --background: #111827;
+  --page-bg-gray-900: #1c1c1f;
+  --page-bg-slate-900: #1c1c1f;
   --foreground: #f9fafb;
   --card: #1f2937;
   --card-foreground: #f9fafb;
@@ -2850,4 +2852,12 @@ html {
 @property --tw-duration {
   syntax: "*";
   inherits: false
+}
+
+.bg-gray-900 {
+  background-color: var(--page-bg-gray-900) !important;
+}
+
+.bg-slate-900 {
+  background-color: var(--page-bg-slate-900) !important;
 }

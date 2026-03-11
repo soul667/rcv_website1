@@ -12,6 +12,20 @@
   Run `pnpm i` to install the dependencies.
 
   Run `pnpm run dev` to start the development server.
+
+  ## Background Color Variables
+
+  Background colors are controlled in `src/index.css`.
+
+  Edit these variables under `:root`:
+
+  - `--page-bg-gray-900`: used by `.bg-gray-900`
+  - `--page-bg-slate-900`: used by `.bg-slate-900`
+
+  Mapping is defined near the bottom of `src/index.css`:
+
+  - `.bg-gray-900 { background-color: var(--page-bg-gray-900) !important; }`
+  - `.bg-slate-900 { background-color: var(--page-bg-slate-900) !important; }`
   
 
   ## Need Update

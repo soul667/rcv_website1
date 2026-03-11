@@ -1,13 +1,23 @@
 import { Menu, X, Globe } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLanguage } from './LanguageContext';
 import { useRouter } from './Router';
 import { Button } from './ui/button';
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showDesktopTitle, setShowDesktopTitle] = useState(() => window.innerWidth >= 1100);
   const { language, toggleLanguage, t } = useLanguage();
   const { navigateTo, currentPage } = useRouter();
+
+  useEffect(() => {
+    const handleResize = () => {
+      setShowDesktopTitle(window.innerWidth >= 1100);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const navItems = [
     { label: t('nav.home'), page: 'home' as const },
@@ -29,8 +39,9 @@ export function Header() {
           {/* Logo */}
           <button 
             onClick={() => navigateTo('home')}
-            className="hidden md:flex items-center space-x-3 text-left group"
+            className="hidden md:block text-left group"
           >
+            <div className="flex items-center space-x-3">
             <div className="relative">
               <img 
                 src="/assets/media/logo.png" 
@@ -53,11 +64,14 @@ export function Header() {
                 }}
               />
             </div>
-            <div className="text-white">
-              {/* <div className="gradient-text font-semibold text-lg"> */}
-              <div className="font-semibold text-lg"> {/* 白色 */}
-                {language === 'zh' ? '机器人与计算机视觉实验室' : 'Robotics and Computer Vision Lab'}
+            {showDesktopTitle && (
+              <div className="text-white">
+                {/* <div className="gradient-text font-semibold text-lg"> */}
+                <div className="font-semibold text-lg"> {/* 白色 */}
+                  {language === 'zh' ? '机器人与计算机视觉实验室' : 'Robotics and Computer Vision Lab'}
+                </div>
               </div>
+            )}
             </div>
           </button>
 
