@@ -207,7 +207,7 @@ export function MemberProfile({ member, onBack }: MemberProfileProps) {
                         {children}
                       </a>
                     ),
-                    img: ({ src, alt, width, height, ...props }) => {
+                    img: ({ src, alt, width, ...props }) => {
                       // Handle image path resolution
                       let imageSrc = src;
                       

@@ -41,8 +41,8 @@ function extractSocialLinks(content: string): { icon: string; icon_pack: string;
   const socialItems: { icon: string; icon_pack: string; link: string }[] = [];
   let currentItem: Partial<{ icon: string; icon_pack: string; link: string }> | null = null;
 
-  const assignKeyValue = (rawLine: string, target: Partial<{ icon: string; icon_pack: string; link: string }>) => {
-    const keyValue = rawLine.match(/^\s*([A-Za-z_][\w-]*)\s*:\s*(.+)\s*$/);
+  const assignKeyValue = (yamlLine: string, target: Partial<{ icon: string; icon_pack: string; link: string }>) => {
+    const keyValue = yamlLine.match(/^\s*([A-Za-z_][\w-]*)\s*:\s*(.+)\s*$/);
     if (!keyValue) return;
     const key = keyValue[1] as 'icon' | 'icon_pack' | 'link';
     const value = keyValue[2].replace(/^["']|["']$/g, '');
@@ -56,7 +56,7 @@ function extractSocialLinks(content: string): { icon: string; icon_pack: string;
     const trimmed = line.trim();
 
     if (!trimmed) continue;
-    if (/^[A-Za-z_][\w-]*\s*:/.test(line)) break;
+    if (/^[A-Za-z_][\w-]*\s*:/.test(trimmed) && !line.startsWith(' ')) break;
 
     if (/^\s*-\s+/.test(line)) {
       if (currentItem?.link) {
@@ -330,8 +330,9 @@ export async function loadAuthorData(authorId: string): Promise<AuthorData | nul
       console.warn(`No image found for ${authorId}, using default`);
     }
     
-    const parsedSocial = Array.isArray(frontmatter.social) && frontmatter.social.some((item: any) => item?.link)
-      ? frontmatter.social
+    const frontmatterSocial = Array.isArray(frontmatter.social) ? frontmatter.social : [];
+    const parsedSocial = frontmatterSocial.length > 0
+      ? frontmatterSocial
       : extractSocialLinks(content);
 
     // Extract email from social links
