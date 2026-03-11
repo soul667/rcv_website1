@@ -221,7 +221,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
                       <ImageWithFallback
                         src={member.image}
                         alt={member.name}
-                        className="w-20 h-20 rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
+                        className="w-20 h-20 aspect-square rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
                         loading="lazy"
                       />
                     </div>
@@ -270,7 +270,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
                       <ImageWithFallback
                         src={student.image}
                         alt={student.name}
-                        className="w-16 h-16 rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
+                        className="w-20 h-20 aspect-square rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
                         loading="lazy"
                       />
                     </div>
@@ -308,7 +308,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
                       <ImageWithFallback
                         src={student.image}
                         alt={student.name}
-                        className="w-16 h-16 rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
+                        className="w-20 h-20 aspect-square rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
                         loading="lazy"
                       />
                     </div>
@@ -346,7 +346,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
                       <ImageWithFallback
                         src={associate.image}
                         alt={associate.name}
-                        className="w-16 h-16 rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
+                        className="w-20 h-20 aspect-square rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
                         loading="lazy"
                       />
                     </div>
@@ -384,7 +384,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
                       <ImageWithFallback
                         src={assistant.image}
                         alt={assistant.name}
-                        className="w-16 h-16 rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
+                        className="w-20 h-20 aspect-square rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
                         loading="lazy"
                       />
                     </div>
@@ -422,7 +422,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
                       <ImageWithFallback
                         src={member.image}
                         alt={member.name}
-                        className="w-16 h-16 rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
+                        className="w-20 h-20 aspect-square rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
                         loading="lazy"
                       />
                     </div>

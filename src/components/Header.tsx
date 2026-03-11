@@ -29,7 +29,7 @@ export function Header() {
           {/* Logo */}
           <button 
             onClick={() => navigateTo('home')}
-            className="flex items-center space-x-3 text-left group"
+            className="hidden md:flex items-center space-x-3 text-left group"
           >
             <div className="relative">
               <img 

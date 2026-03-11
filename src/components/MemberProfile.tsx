@@ -1,4 +1,4 @@
-import { Mail, ExternalLink } from 'lucide-react';
+import { Mail, GraduationCap, Github, Globe, Twitter, Linkedin, FileText } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { useLanguage } from './LanguageContext';
 import { useRouter } from './Router';
@@ -86,18 +86,43 @@ export function MemberProfile({ member, onBack }: MemberProfileProps) {
     navigateTo('team');
   };
 
-  // Find personal website or scholar link from social data
-  const websiteLink = member.social?.find((s: any) => 
-    s.icon === 'globe'
-  );
-  const scholarLink = member.social?.find((s: any) => 
-    s.icon === 'graduation-cap'
-  );
-  const githubLink = member.social?.find((s: any) => 
-    s.icon === 'github'
-  );
-  // Use the first available external link (prefer website > scholar > github)
-  const externalLink = websiteLink || scholarLink || githubLink;
+  const getSocialIcon = (iconName: string) => {
+    const normalizedIcon = iconName.trim().toLowerCase();
+    switch (normalizedIcon) {
+      case 'envelope':
+        return Mail;
+      case 'graduation-cap':
+        return GraduationCap;
+      case 'github':
+        return Github;
+      case 'twitter':
+        return Twitter;
+      case 'linkedin':
+        return Linkedin;
+      case 'globe':
+        return Globe;
+      case 'cv':
+        return FileText;
+      default:
+        return Globe;
+    }
+  };
+
+  const getSocialLabel = (iconName: string, link: string) => {
+    const normalizedIcon = iconName.trim().toLowerCase();
+    if (normalizedIcon === 'envelope') {
+      return link.replace(/^mailto:/, '');
+    }
+    if (normalizedIcon === 'graduation-cap') return 'Google Scholar';
+    if (normalizedIcon === 'github') return 'GitHub';
+    if (normalizedIcon === 'twitter') return 'X / Twitter';
+    if (normalizedIcon === 'linkedin') return 'LinkedIn';
+    if (normalizedIcon === 'cv') return 'CV';
+    return 'Website';
+  };
+
+  const socialLinks = (member.social || []).filter((item) => item?.link);
+  const hasEmailInSocial = socialLinks.some((item) => item.icon?.trim().toLowerCase() === 'envelope');
 
   return (
     <div className="min-h-screen bg-slate-900 py-20">
@@ -108,12 +133,12 @@ export function MemberProfile({ member, onBack }: MemberProfileProps) {
         {/* Header */}
         <div className="flex flex-col lg:flex-row gap-8 mb-12">
           <div className="lg:w-1/3">
-            <ImageWithFallback
-              src={member.image}
-              alt={member.name}
-              className="w-full max-w-sm mx-auto rounded-lg object-cover aspect-square"
-              loading="lazy"
-            />
+              <ImageWithFallback
+                src={member.image}
+                alt={member.name}
+                className="w-44 h-44 sm:w-56 sm:h-56 rounded-full object-cover mx-auto ring-2 ring-slate-600/50"
+                loading="lazy"
+              />
           </div>
           
           <div className="lg:w-2/3 text-white">
@@ -125,28 +150,33 @@ export function MemberProfile({ member, onBack }: MemberProfileProps) {
             </p>
             
             {/* Contact Info */}
-            <div className="flex flex-wrap gap-4 mb-6">
-              {member.email && (
-                <a
-                  href={`mailto:${member.email}`}
-                  className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors"
-                >
-                  <Mail className="h-4 w-4" />
-                  <span>{member.email}</span>
-                </a>
-              )}
-              {externalLink && (
-                <a
-                  href={externalLink.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors"
-                >
-                  <ExternalLink className="h-4 w-4" />
-                  <span>Personal Website</span>
-                </a>
-              )}
-            </div>
+              <div className="flex flex-wrap gap-4 mb-6">
+               {member.email && !hasEmailInSocial && (
+                 <a
+                   href={`mailto:${member.email}`}
+                   className="flex items-center gap-2 px-3 py-2 rounded-full border border-slate-600/60 bg-slate-800/40 text-gray-200 hover:border-orange-400/60 hover:text-white hover:bg-slate-700/50 transition-all"
+                 >
+                   <Mail className="h-4 w-4" />
+                   <span>{member.email}</span>
+                 </a>
+               )}
+               {socialLinks.map((item, index) => {
+                 const IconComponent = getSocialIcon(item.icon);
+                 const isMail = item.link.startsWith('mailto:');
+                 return (
+                 <a
+                   key={`${item.icon}-${index}`}
+                   href={item.link}
+                   target={isMail ? undefined : '_blank'}
+                   rel={isMail ? undefined : 'noopener noreferrer'}
+                   className="flex items-center gap-2 px-3 py-2 rounded-full border border-slate-600/60 bg-slate-800/40 text-gray-200 hover:border-orange-400/60 hover:text-white hover:bg-slate-700/50 transition-all"
+                 >
+                   <IconComponent className="h-4 w-4" />
+                   <span>{getSocialLabel(item.icon, item.link)}</span>
+                 </a>
+                 );
+               })}
+             </div>
           </div>
         </div>
 
@@ -198,8 +228,8 @@ export function MemberProfile({ member, onBack }: MemberProfileProps) {
                             alt={alt || 'Research image'} 
                             className="mx-auto rounded-lg shadow-lg max-w-full h-auto"
                             style={{ 
-                              maxWidth: width ? `${width}px` : '100%',
-                              height: height ? `${height}px` : 'auto'
+                              maxWidth: width ? `min(100%, ${width}px)` : '100%',
+                              height: 'auto'
                             }}
                             {...props}
                           />

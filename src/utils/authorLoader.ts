@@ -30,6 +30,64 @@ interface AuthorData {
   markdownContent?: string; // 添加完整的markdown内容
 }
 
+function extractSocialLinks(content: string): { icon: string; icon_pack: string; link: string }[] {
+  const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
+  if (!frontmatterMatch) return [];
+
+  const lines = frontmatterMatch[1].split('\n');
+  const socialIndex = lines.findIndex((line) => line.trim() === 'social:');
+  if (socialIndex < 0) return [];
+
+  const socialItems: { icon: string; icon_pack: string; link: string }[] = [];
+  let currentItem: Partial<{ icon: string; icon_pack: string; link: string }> | null = null;
+
+  const assignKeyValue = (rawLine: string, target: Partial<{ icon: string; icon_pack: string; link: string }>) => {
+    const keyValue = rawLine.match(/^\s*([A-Za-z_][\w-]*)\s*:\s*(.+)\s*$/);
+    if (!keyValue) return;
+    const key = keyValue[1] as 'icon' | 'icon_pack' | 'link';
+    const value = keyValue[2].replace(/^["']|["']$/g, '');
+    if (key === 'icon' || key === 'icon_pack' || key === 'link') {
+      target[key] = value;
+    }
+  };
+
+  for (let i = socialIndex + 1; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    if (!trimmed) continue;
+    if (/^[A-Za-z_][\w-]*\s*:/.test(line)) break;
+
+    if (/^\s*-\s+/.test(line)) {
+      if (currentItem?.link) {
+        socialItems.push({
+          icon: currentItem.icon || 'globe',
+          icon_pack: currentItem.icon_pack || 'fas',
+          link: currentItem.link
+        });
+      }
+
+      currentItem = {};
+      assignKeyValue(line.replace(/^\s*-\s+/, ''), currentItem);
+      continue;
+    }
+
+    if (currentItem) {
+      assignKeyValue(line, currentItem);
+    }
+  }
+
+  if (currentItem?.link) {
+    socialItems.push({
+      icon: currentItem.icon || 'globe',
+      icon_pack: currentItem.icon_pack || 'fas',
+      link: currentItem.link
+    });
+  }
+
+  return socialItems;
+}
+
 // Parse frontmatter from markdown content using gray-matter
 function parseFrontmatter(content: string) {
   try {
@@ -272,8 +330,12 @@ export async function loadAuthorData(authorId: string): Promise<AuthorData | nul
       console.warn(`No image found for ${authorId}, using default`);
     }
     
+    const parsedSocial = Array.isArray(frontmatter.social) && frontmatter.social.some((item: any) => item?.link)
+      ? frontmatter.social
+      : extractSocialLinks(content);
+
     // Extract email from social links
-    const email = frontmatter.social?.find((s: any) => s.icon === 'envelope')?.link?.replace('mailto:', '');
+    const email = parsedSocial?.find((s: any) => s.icon === 'envelope')?.link?.replace('mailto:', '');
     
     // Parse research interests and publications
     const researchText = sections.research || '';
@@ -310,7 +372,7 @@ export async function loadAuthorData(authorId: string): Promise<AuthorData | nul
       weight: frontmatter.weight,
       role: frontmatter.role,
       userGroups: frontmatter.user_groups || frontmatter.userGroups || [],
-      social: frontmatter.social || [],
+      social: parsedSocial,
       markdownContent: body // 添加完整的markdown内容
     };
   } catch (error) {
