@@ -1,9 +1,9 @@
-import { ArrowLeft, Mail, ExternalLink, User, Play } from 'lucide-react';
+import { Mail, ExternalLink } from 'lucide-react';
 import { Card, CardContent } from './ui/card';
-import { Button } from './ui/button';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { useLanguage } from './LanguageContext';
 import { useRouter } from './Router';
+import { BackButton } from './BackButton';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -86,14 +86,7 @@ export function MemberProfile({ member, onBack }: MemberProfileProps) {
     <div className="min-h-screen bg-slate-900 py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
-        <Button
-          onClick={handleBack}
-          variant="ghost"
-          className="text-gray-300 hover:text-white hover:bg-slate-800 mb-8"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          {t('team.backToTeam')}
-        </Button>
+        <BackButton onClick={handleBack} label={t('team.backToTeam')} />
 
         {/* Header */}
         <div className="flex flex-col lg:flex-row gap-8 mb-12">

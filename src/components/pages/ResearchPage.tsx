@@ -1,9 +1,10 @@
 import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
-import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
 import { useLanguage } from '../LanguageContext';
 import { useRouter } from '../Router';
+import { BackButton } from '../BackButton';
 import { useState, useEffect, useCallback } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { loadResearchAreas, ResearchArea } from '../../utils/researchLoader';
@@ -102,16 +103,9 @@ export function ResearchPage() {
 
   return (
     <div className="min-h-screen py-20">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
-        <Button
-          onClick={() => navigateTo('home')}
-          variant="ghost"
-          className="mb-8 px-6 py-3 text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          {language === 'zh' ? '返回主页' : 'Back to Home'}
-        </Button>
+        <BackButton onClick={() => navigateTo('home')} />
 
         {/* Page Header */}
         <div className="text-center mb-16">
