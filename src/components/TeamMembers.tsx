@@ -213,40 +213,40 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
           <div className="mb-16">
             <h3 className="text-2xl mb-8 text-white text-center">{t('team.faculty')}</h3>
             
-            <div className="grid grid-cols-2 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
               {faculty.map((member) => (
                 <Card key={member.id} className="bg-slate-800/40 border-slate-600/30 hover:bg-slate-800/60 hover:border-slate-500/50 transition-all duration-300 cursor-pointer group rounded-xl shadow-none">
-                  <CardContent className="p-6 text-center">
-                    <div className="mb-4">
+                  <CardContent className="p-4 text-center">
+                    <div className="mb-3">
                       <ImageWithFallback
                         src={member.image}
                         alt={member.name}
-                        className="w-24 h-24 rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
+                        className="w-20 h-20 rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
                         loading="lazy"
                       />
                     </div>
-                    <h4 className="text-xl mb-1 text-white">
+                    <h4 className="text-lg mb-0.5 text-white">
                       {language === 'zh' ? member.name : member.nameEn}
                     </h4>
-                    <p className="text-sm text-gray-400 mb-4">
+                    <p className="text-xs text-gray-400 mb-2">
                       {language === 'zh' ? member.title : member.titleEn}
                     </p>
-                    <div className="flex justify-center space-x-2 mb-4">
-                      {member.email && (
+                    {member.email && (
+                      <div className="flex justify-center mb-2">
                         <a
                           href={`mailto:${member.email}`}
-                          className="p-2 text-gray-400 hover:text-white transition-colors"
+                          className="p-1.5 text-gray-400 hover:text-white transition-colors"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          <Mail className="h-4 w-4" />
+                          <Mail className="h-3.5 w-3.5" />
                         </a>
-                      )}
-                    </div>
+                      </div>
+                    )}
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => onMemberClick?.(member)}
-                      className="group-hover:bg-orange-500 group-hover:text-white transition-colors"
+                      className="group-hover:bg-orange-500 group-hover:text-white transition-colors text-xs px-3 py-1 h-7"
                     >
                       {t('team.viewProfile')}
                     </Button>
@@ -262,29 +262,29 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
           <div className="mb-16">
             <h3 className="text-2xl mb-8 text-white text-center">{t('team.phd')}</h3>
             
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {phdStudents.map((student) => (
                 <Card key={student.id} className="bg-slate-800/40 border-slate-600/30 hover:bg-slate-800/60 hover:border-slate-500/50 transition-all duration-300 cursor-pointer group rounded-xl shadow-none">
-                  <CardContent className="p-6 text-center">
-                    <div className="mb-4">
+                  <CardContent className="p-4 text-center">
+                    <div className="mb-3">
                       <ImageWithFallback
                         src={student.image}
                         alt={student.name}
-                        className="w-24 h-24 rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
+                        className="w-16 h-16 rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
                         loading="lazy"
                       />
                     </div>
-                    <h4 className="text-lg mb-1 text-white">
+                    <h4 className="text-sm font-medium mb-0.5 text-white">
                       {language === 'zh' ? student.name : student.nameEn}
                     </h4>
-                    <p className="text-sm text-gray-400 mb-4">
+                    <p className="text-xs text-gray-400 mb-2">
                       {language === 'zh' ? student.title : student.titleEn}
                     </p>
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => onMemberClick?.(student)}
-                      className="group-hover:bg-orange-500 group-hover:text-white transition-colors"
+                      className="group-hover:bg-orange-500 group-hover:text-white transition-colors text-xs px-3 py-1 h-7"
                     >
                       {t('team.viewProfile')}
                     </Button>
@@ -300,29 +300,29 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
           <div className="mb-16">
             <h3 className="text-2xl mb-8 text-white text-center">{t('team.master')}</h3>
             
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {masterStudents.map((student) => (
                 <Card key={student.id} className="bg-slate-800/40 border-slate-600/30 hover:bg-slate-800/60 hover:border-slate-500/50 transition-all duration-300 cursor-pointer group rounded-xl shadow-none">
-                  <CardContent className="p-6 text-center">
-                    <div className="mb-4">
+                  <CardContent className="p-4 text-center">
+                    <div className="mb-3">
                       <ImageWithFallback
                         src={student.image}
                         alt={student.name}
-                        className="w-24 h-24 rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
+                        className="w-16 h-16 rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
                         loading="lazy"
                       />
                     </div>
-                    <h4 className="text-lg mb-1 text-white">
+                    <h4 className="text-sm font-medium mb-0.5 text-white">
                       {language === 'zh' ? student.name : student.nameEn}
                     </h4>
-                    <p className="text-sm text-gray-400 mb-4">
+                    <p className="text-xs text-gray-400 mb-2">
                       {language === 'zh' ? student.title : student.titleEn}
                     </p>
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => onMemberClick?.(student)}
-                      className="group-hover:bg-orange-500 group-hover:text-white transition-colors"
+                      className="group-hover:bg-orange-500 group-hover:text-white transition-colors text-xs px-3 py-1 h-7"
                     >
                       {t('team.viewProfile')}
                     </Button>
@@ -338,29 +338,29 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
           <div className="mb-16">
             <h3 className="text-2xl mb-8 text-white text-center">{t('team.researchAssociates')}</h3>
             
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {researchAssociates.map((associate) => (
                 <Card key={associate.id} className="bg-slate-800/40 border-slate-600/30 hover:bg-slate-800/60 hover:border-slate-500/50 transition-all duration-300 cursor-pointer group rounded-xl shadow-none">
-                  <CardContent className="p-6 text-center">
-                    <div className="mb-4">
+                  <CardContent className="p-4 text-center">
+                    <div className="mb-3">
                       <ImageWithFallback
                         src={associate.image}
                         alt={associate.name}
-                        className="w-24 h-24 rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
+                        className="w-16 h-16 rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
                         loading="lazy"
                       />
                     </div>
-                    <h4 className="text-lg mb-1 text-white">
+                    <h4 className="text-sm font-medium mb-0.5 text-white">
                       {language === 'zh' ? associate.name : associate.nameEn}
                     </h4>
-                    <p className="text-sm text-gray-400 mb-4">
+                    <p className="text-xs text-gray-400 mb-2">
                       {language === 'zh' ? associate.title : associate.titleEn}
                     </p>
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => onMemberClick?.(associate)}
-                      className="group-hover:bg-orange-500 group-hover:text-white transition-colors"
+                      className="group-hover:bg-orange-500 group-hover:text-white transition-colors text-xs px-3 py-1 h-7"
                     >
                       {t('team.viewProfile')}
                     </Button>
@@ -376,29 +376,29 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
           <div className="mb-16">
             <h3 className="text-2xl mb-8 text-white text-center">{t('team.adminAssistants')}</h3>
             
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {administrativeAssistants.map((assistant) => (
                 <Card key={assistant.id} className="bg-slate-800/40 border-slate-600/30 hover:bg-slate-800/60 hover:border-slate-500/50 transition-all duration-300 cursor-pointer group rounded-xl shadow-none">
-                  <CardContent className="p-6 text-center">
-                    <div className="mb-4">
+                  <CardContent className="p-4 text-center">
+                    <div className="mb-3">
                       <ImageWithFallback
                         src={assistant.image}
                         alt={assistant.name}
-                        className="w-24 h-24 rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
+                        className="w-16 h-16 rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
                         loading="lazy"
                       />
                     </div>
-                    <h4 className="text-lg mb-1 text-white">
+                    <h4 className="text-sm font-medium mb-0.5 text-white">
                       {language === 'zh' ? assistant.name : assistant.nameEn}
                     </h4>
-                    <p className="text-sm text-gray-400 mb-4">
+                    <p className="text-xs text-gray-400 mb-2">
                       {language === 'zh' ? assistant.title : assistant.titleEn}
                     </p>
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => onMemberClick?.(assistant)}
-                      className="group-hover:bg-orange-500 group-hover:text-white transition-colors"
+                      className="group-hover:bg-orange-500 group-hover:text-white transition-colors text-xs px-3 py-1 h-7"
                     >
                       {t('team.viewProfile')}
                     </Button>
@@ -414,29 +414,29 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
           <div className="mb-16">
             <h3 className="text-2xl mb-8 text-white text-center">{t('team.others')}</h3>
             
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {others.map((member) => (
                 <Card key={member.id} className="bg-slate-800/40 border-slate-600/30 hover:bg-slate-800/60 hover:border-slate-500/50 transition-all duration-300 cursor-pointer group rounded-xl shadow-none">
-                  <CardContent className="p-6 text-center">
-                    <div className="mb-4">
+                  <CardContent className="p-4 text-center">
+                    <div className="mb-3">
                       <ImageWithFallback
                         src={member.image}
                         alt={member.name}
-                        className="w-24 h-24 rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
+                        className="w-16 h-16 rounded-full mx-auto object-cover ring-2 ring-slate-600/50 group-hover:ring-orange-500/50 transition-all duration-300"
                         loading="lazy"
                       />
                     </div>
-                    <h4 className="text-lg mb-1 text-white">
+                    <h4 className="text-sm font-medium mb-0.5 text-white">
                       {language === 'zh' ? member.name : member.nameEn}
                     </h4>
-                    <p className="text-sm text-gray-400 mb-4">
+                    <p className="text-xs text-gray-400 mb-2">
                       {language === 'zh' ? member.title : member.titleEn}
                     </p>
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => onMemberClick?.(member)}
-                      className="group-hover:bg-orange-500 group-hover:text-white transition-colors"
+                      className="group-hover:bg-orange-500 group-hover:text-white transition-colors text-xs px-3 py-1 h-7"
                     >
                       {t('team.viewProfile')}
                     </Button>
@@ -451,118 +451,55 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
         <div className="mt-20">
           <h3 className="text-2xl mb-8 text-white text-center">{t('team.alumni')}</h3>
           
-          <div className="max-w-4xl mx-auto bg-slate-800/40 border border-slate-600/30 rounded-xl p-8">
+          <div className="max-w-4xl mx-auto bg-slate-800/40 border border-slate-600/30 rounded-xl p-6 sm:p-8">
             {/* Post-Doctoral Fellows */}
-            <div className="mb-8">
-              <h4 className="text-lg font-semibold text-orange-400 mb-4 border-b border-slate-600/40 pb-2">Post-Doctoral Fellows</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                  <span className="text-white font-medium">Weinan Chen</span>
-                  <span className="text-gray-400 text-sm">(2020 – 2022)</span>
-                  <span className="text-gray-500 text-sm italic sm:ml-1">Guangdong University of Technology</span>
-                </li>
+            <div className="mb-6">
+              <h4 className="text-lg font-semibold text-orange-400 mb-3 border-b border-slate-600/40 pb-2">Post-Doctoral Fellows</h4>
+              <ul className="space-y-1.5 text-gray-300 text-sm">
+                <li><span className="text-white font-medium">Weinan Chen</span> <span className="text-gray-400">(2020 – 2022),</span> <span className="text-gray-500 italic">Guangdong University of Technology</span></li>
               </ul>
             </div>
 
             {/* Ph.D. Students */}
-            <div className="mb-8">
-              <h4 className="text-lg font-semibold text-orange-400 mb-4 border-b border-slate-600/40 pb-2">Ph.D. Students</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                  <span className="text-white font-medium">Chao Tang</span>
-                  <span className="text-gray-400 text-sm">(2020 – 2025)</span>
-                  <span className="text-gray-500 text-sm italic sm:ml-1">Kungliga Tekniska Högskolan</span>
-                </li>
+            <div className="mb-6">
+              <h4 className="text-lg font-semibold text-orange-400 mb-3 border-b border-slate-600/40 pb-2">Ph.D. Students</h4>
+              <ul className="space-y-1.5 text-gray-300 text-sm">
+                <li><span className="text-white font-medium">Chao Tang</span> <span className="text-gray-400">(2020 – 2025),</span> <span className="text-gray-500 italic">Kungliga Tekniska Högskolan</span></li>
               </ul>
             </div>
 
             {/* M.Sc. Students */}
-            <div className="mb-8">
-              <h4 className="text-lg font-semibold text-orange-400 mb-4 border-b border-slate-600/40 pb-2">M.Sc. Students</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                  <span className="text-white font-medium">Jiahao Ruan</span>
-                  <span className="text-gray-400 text-sm">(2020 – 2023)</span>
-                  <span className="text-gray-500 text-sm italic sm:ml-1">Ubtech Robotics Corp</span>
-                </li>
-                <li className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                  <span className="text-white font-medium">Ruihao Zhou</span>
-                  <span className="text-gray-400 text-sm">(2020 – 2023)</span>
-                  <span className="text-gray-500 text-sm italic sm:ml-1">China Tobacco</span>
-                </li>
-                <li className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                  <span className="text-white font-medium">Yaling Pan</span>
-                  <span className="text-gray-400 text-sm">(2020 – 2023)</span>
-                </li>
-                <li className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                  <span className="text-white font-medium">Zhilong Tang</span>
-                  <span className="text-gray-400 text-sm">(2020 – 2023)</span>
-                  <span className="text-gray-500 text-sm italic sm:ml-1">BYD Auto</span>
-                </li>
-                <li className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                  <span className="text-white font-medium">Jieting Zhao</span>
-                  <span className="text-gray-400 text-sm">(2021 – 2024)</span>
-                  <span className="text-gray-500 text-sm italic sm:ml-1">XPENG Motors</span>
-                </li>
-                <li className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                  <span className="text-white font-medium">Wen Li</span>
-                  <span className="text-gray-400 text-sm">(2021 – 2024)</span>
-                  <span className="text-gray-500 text-sm italic sm:ml-1">Meituan</span>
-                </li>
-                <li className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                  <span className="text-white font-medium">Wenqi Ge</span>
-                  <span className="text-gray-400 text-sm">(2022 – 2025)</span>
-                  <span className="text-gray-500 text-sm italic sm:ml-1">University of Hong Kong</span>
-                </li>
-                <li className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                  <span className="text-white font-medium">Zhenchao Lin</span>
-                  <span className="text-gray-400 text-sm">(2022 – 2025)</span>
-                  <span className="text-gray-500 text-sm italic sm:ml-1">VisionNav Robotics</span>
-                </li>
-                <li className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                  <span className="text-white font-medium">Zijun Lin</span>
-                  <span className="text-gray-400 text-sm">(2022 – 2025)</span>
-                  <span className="text-gray-500 text-sm italic sm:ml-1">Kingdee</span>
-                </li>
+            <div className="mb-6">
+              <h4 className="text-lg font-semibold text-orange-400 mb-3 border-b border-slate-600/40 pb-2">M.Sc. Students</h4>
+              <ul className="space-y-1.5 text-gray-300 text-sm">
+                <li><span className="text-white font-medium">Jiahao Ruan</span> <span className="text-gray-400">(2020 – 2023),</span> <span className="text-gray-500 italic">Ubtech Robotics Corp</span></li>
+                <li><span className="text-white font-medium">Ruihao Zhou</span> <span className="text-gray-400">(2020 – 2023),</span> <span className="text-gray-500 italic">China Tobacco</span></li>
+                <li><span className="text-white font-medium">Yaling Pan</span> <span className="text-gray-400">(2020 – 2023)</span></li>
+                <li><span className="text-white font-medium">Zhilong Tang</span> <span className="text-gray-400">(2020 – 2023),</span> <span className="text-gray-500 italic">BYD Auto</span></li>
+                <li><span className="text-white font-medium">Jieting Zhao</span> <span className="text-gray-400">(2021 – 2024),</span> <span className="text-gray-500 italic">XPENG Motors</span></li>
+                <li><span className="text-white font-medium">Wen Li</span> <span className="text-gray-400">(2021 – 2024),</span> <span className="text-gray-500 italic">Meituan</span></li>
+                <li><span className="text-white font-medium">Wenqi Ge</span> <span className="text-gray-400">(2022 – 2025),</span> <span className="text-gray-500 italic">University of Hong Kong</span></li>
+                <li><span className="text-white font-medium">Zhenchao Lin</span> <span className="text-gray-400">(2022 – 2025),</span> <span className="text-gray-500 italic">VisionNav Robotics</span></li>
+                <li><span className="text-white font-medium">Zijun Lin</span> <span className="text-gray-400">(2022 – 2025),</span> <span className="text-gray-500 italic">Kingdee</span></li>
               </ul>
             </div>
 
             {/* Undergraduate Students */}
-            <div className="mb-8">
-              <h4 className="text-lg font-semibold text-orange-400 mb-4 border-b border-slate-600/40 pb-2">Undergraduate Students</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                  <span className="text-white font-medium">Bingqing (Selina) Wan</span>
-                  <span className="text-gray-400 text-sm">(2022)</span>
-                  <span className="text-gray-500 text-sm italic sm:ml-1">University of Toronto</span>
-                </li>
-                <li className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                  <span className="text-white font-medium">Jiayi Yang</span>
-                  <span className="text-gray-400 text-sm">(2024)</span>
-                  <span className="text-gray-500 text-sm italic sm:ml-1">University of Tokyo</span>
-                </li>
+            <div className="mb-6">
+              <h4 className="text-lg font-semibold text-orange-400 mb-3 border-b border-slate-600/40 pb-2">Undergraduate Students</h4>
+              <ul className="space-y-1.5 text-gray-300 text-sm">
+                <li><span className="text-white font-medium">Bingqing (Selina) Wan</span> <span className="text-gray-400">(2022),</span> <span className="text-gray-500 italic">University of Toronto</span></li>
+                <li><span className="text-white font-medium">Jiayi Yang</span> <span className="text-gray-400">(2024),</span> <span className="text-gray-500 italic">University of Tokyo</span></li>
               </ul>
             </div>
 
             {/* Research Associates (Alumni) */}
             <div>
-              <h4 className="text-lg font-semibold text-orange-400 mb-4 border-b border-slate-600/40 pb-2">Research Associates</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                  <span className="text-white font-medium">Xinkai Jiang</span>
-                  <span className="text-gray-400 text-sm">(2021 – 2022)</span>
-                  <span className="text-gray-500 text-sm italic sm:ml-1">Karlsruher Institut für Technologie</span>
-                </li>
-                <li className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                  <span className="text-white font-medium">Renxiang Xiao</span>
-                  <span className="text-gray-400 text-sm">(2023.01 – 2023.12)</span>
-                  <span className="text-gray-500 text-sm italic sm:ml-1">Harbin Institute of Technology, Shenzhen</span>
-                </li>
-                <li className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                  <span className="text-white font-medium">Qijin She</span>
-                  <span className="text-gray-400 text-sm">(2024.04 – 2024.08)</span>
-                  <span className="text-gray-500 text-sm italic sm:ml-1">Hong Kong University Of Science and Technology</span>
-                </li>
+              <h4 className="text-lg font-semibold text-orange-400 mb-3 border-b border-slate-600/40 pb-2">Research Associates</h4>
+              <ul className="space-y-1.5 text-gray-300 text-sm">
+                <li><span className="text-white font-medium">Xinkai Jiang</span> <span className="text-gray-400">(2021 – 2022),</span> <span className="text-gray-500 italic">Karlsruher Institut für Technologie</span></li>
+                <li><span className="text-white font-medium">Renxiang Xiao</span> <span className="text-gray-400">(2023.01 – 2023.12),</span> <span className="text-gray-500 italic">Harbin Institute of Technology, Shenzhen</span></li>
+                <li><span className="text-white font-medium">Qijin She</span> <span className="text-gray-400">(2024.04 – 2024.08),</span> <span className="text-gray-500 italic">Hong Kong University Of Science and Technology</span></li>
               </ul>
             </div>
           </div>

@@ -1,5 +1,4 @@
 import { Mail, ExternalLink } from 'lucide-react';
-import { Card, CardContent } from './ui/card';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { useLanguage } from './LanguageContext';
 import { useRouter } from './Router';
@@ -89,15 +88,15 @@ export function MemberProfile({ member, onBack }: MemberProfileProps) {
 
   // Find personal website or scholar link from social data
   const websiteLink = member.social?.find((s: any) => 
-    s.icon === 'globe' || s.link?.includes('http') && !s.link?.includes('mailto:')
+    s.icon === 'globe'
   );
   const scholarLink = member.social?.find((s: any) => 
-    s.icon === 'graduation-cap' || s.link?.includes('scholar.google') || s.link?.includes('dblp.org')
+    s.icon === 'graduation-cap'
   );
   const githubLink = member.social?.find((s: any) => 
-    s.icon === 'github' || s.link?.includes('github.com')
+    s.icon === 'github'
   );
-  // Use the first available external link
+  // Use the first available external link (prefer website > scholar > github)
   const externalLink = websiteLink || scholarLink || githubLink;
 
   return (
@@ -151,12 +150,9 @@ export function MemberProfile({ member, onBack }: MemberProfileProps) {
           </div>
         </div>
 
-        {/* Content - aligned with full width */}
-        <div className="space-y-8">
-          {/* Full Markdown Content */}
-          <Card className="bg-slate-800/60 backdrop-blur-lg border-slate-600/60 shadow-xl">
-            <CardContent className="p-8">
-              <div className="prose prose-invert max-w-none">
+        {/* Content - aligned with header */}
+        <div className="border-t border-slate-700/60 pt-8">
+          <div className="prose prose-invert max-w-none">
                 <ReactMarkdown 
                   remarkPlugins={[remarkGfm]}
                   rehypePlugins={[rehypeRaw]}
@@ -255,9 +251,7 @@ export function MemberProfile({ member, onBack }: MemberProfileProps) {
                   {parseShortcodes(member.markdownContent || member.bio)}
                 </ReactMarkdown>
               </div>
-            </CardContent>
-          </Card>
-        </div>
+            </div>
       </div>
     </div>
   );
