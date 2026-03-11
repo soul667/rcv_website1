@@ -389,7 +389,6 @@
 
   * {
     border-color: var(--border);
-    outline-color: var(--ring);
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -401,10 +400,6 @@
   body {
     background-color: var(--background);
     color: var(--foreground);
-  }
-
-  * {
-    border-color: var(--border);
   }
 
   body {
@@ -2356,7 +2351,7 @@
   --muted-foreground: #9ca3af;
   --accent: #1f2937;
   --accent-foreground: #f9fafb;
-  --border: #374151;
+  --border: #37415100;   /* 默认不设置边框*/
   --input: #374151;
   --ring: #3b82f6;
   --radius: .5rem;

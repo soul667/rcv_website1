@@ -68,11 +68,12 @@ export function Header() {
                 <button
                   key={item.label}
                   onClick={() => handleNavClick(item.page)}
-                  className={`px-4 py-2 rounded-xl transition-all duration-300 backdrop-blur-sm ${
+                  className={`relative px-4 py-2 transition-all duration-300 ${
                     currentPage === item.page 
-                      ? 'text-blue-300 bg-white/20 shadow-lg' 
-                      : 'text-gray-200 hover:text-white hover:bg-white/5'
+                      ? 'text-white rounded-full shadow-lg' 
+                      : 'text-gray-200 bg-transparent rounded-full hover:text-white'
                   }`}
+                  style={currentPage === item.page ? { backgroundColor: 'rgb(255 255 255 / 13%)' } : undefined}
                 >
                   {item.label}
                 </button>
@@ -84,7 +85,8 @@ export function Header() {
                   variant="ghost"
                   size="sm"
                   onClick={toggleLanguage}
-                  className="px-3 py-2 text-gray-200 hover:text-white hover:bg-white/5 transition-all duration-300 rounded-xl backdrop-blur-sm"
+                  className="px-3 py-2 text-white hover:bg-[#5a5c60] hover:text-white transition-all duration-300 rounded-full"
+                  style={{ backgroundColor: 'rgb(255 255 255 / 13%)' }}
                 >
                   <Globe className="h-4 w-4 mr-2" />
                   {language === 'en' ? '中文' : 'EN'}
@@ -110,11 +112,12 @@ export function Header() {
                 <button
                   key={item.label}
                   onClick={() => handleNavClick(item.page)}
-                  className={`px-4 py-3 rounded-xl text-left transition-all duration-300 backdrop-blur-sm ${
+                  className={`relative px-4 py-3 text-left transition-all duration-300 ${
                     currentPage === item.page 
-                      ? 'text-blue-300 bg-white/20 shadow-lg' 
-                      : 'text-gray-200 hover:text-white hover:bg-white/5'
+                      ? 'text-white rounded-full shadow-lg' 
+                      : 'text-gray-200 bg-transparent rounded-full hover:text-white'
                   }`}
+                  style={currentPage === item.page ? { backgroundColor: 'rgb(255 255 255 / 13%)' } : undefined}
                 >
                   {item.label}
                 </button>
@@ -129,7 +132,8 @@ export function Header() {
                     toggleLanguage();
                     setIsMenuOpen(false);
                   }}
-                  className="flex items-center space-x-2 text-gray-200 hover:text-white hover:bg-white/5 w-full justify-start rounded-xl backdrop-blur-sm"
+                  className="flex items-center space-x-2 text-white hover:bg-[#5a5c60] hover:text-white w-full justify-start rounded-full"
+                  style={{ backgroundColor: 'rgb(255 255 255 / 13%)' }}
                 >
                   <Globe className="h-4 w-4" />
                   <span>{language === 'en' ? '中文' : 'EN'}</span>

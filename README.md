@@ -6,13 +6,12 @@
   ## Running the code
 
   ```shell
-  sudo aot update 
+  sudo apt update
   sudo apt install nodejs npm
   ```
+  Run `pnpm i` to install the dependencies.
 
-  Run `npm i` to install the dependencies.
-
-  Run `npm run dev` to start the development server.
+  Run `pnpm run dev` to start the development server.
   
 
   ## Need Update
