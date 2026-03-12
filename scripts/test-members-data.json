@@ -1,0 +1,118 @@
+[
+  {
+    "id": "Lina_Sun",
+    "name": "Lina Sun",
+    "weight": 80,
+    "role": "Incoming Ph.D. Student (Fall 2025)",
+    "user_groups": ["Ph.D. Students"],
+    "email": "lina.sun@rcvlab.edu",
+    "social": [
+      {
+        "icon": "envelope",
+        "icon_pack": "fas",
+        "link": "mailto:lina.sun@rcvlab.edu"
+      },
+      {
+        "icon_pack": "fab",
+        "icon": "linkedin",
+        "link": "https://www.linkedin.com/in/lina-sun-rcv"
+      }
+    ],
+    "bio": "Lina will join the RCV Lab in Fall 2025 to focus on robust multi-sensor perception for mobile robots. She previously interned on visual-inertial mapping projects and enjoys deploying research code onto field robots.",
+    "research": [
+      "Multimodal localization in dense urban campuses",
+      "Event and RGB fusion for long-horizon SLAM",
+      "Trustworthy perception for autonomous inspection platforms"
+    ],
+    "publications": [
+      "Sun, L., et al. \"Robust Polarimetric SLAM for Dynamic Campuses.\" 2025. [[Paper]](https://arxiv.org/abs/2502.01234)"
+    ]
+  },
+  {
+    "id": "Ravi_Patel",
+    "name": "Ravi Patel",
+    "weight": 81,
+    "role": "Incoming Ph.D. Student",
+    "user_groups": ["Ph.D. Students"],
+    "email": "ravi.patel@rcvlab.edu",
+    "social": [
+      {
+        "icon": "envelope",
+        "icon_pack": "fas",
+        "link": "mailto:ravi.patel@rcvlab.edu"
+      },
+      {
+        "icon_pack": "fab",
+        "icon": "github",
+        "link": "https://github.com/ravipatel-rcv"
+      }
+    ],
+    "bio": "Ravi joins the lab from an embedded systems background and is interested in data-efficient manipulation. He prototypes robotic hands and pipelines that connect perception with grasp synthesis.",
+    "research": [
+      "Learning-based grasp planning under limited supervision",
+      "Tactile and vision fusion for dexterous manipulation",
+      "Hardware-aware policy deployment on mobile manipulators"
+    ],
+    "publications": [
+      "Patel, R., et al. \"Lightweight Grasp Policies for Mobile Manipulators.\" ICRA Workshop, 2024. [[Paper]](https://arxiv.org/abs/2408.10011)"
+    ]
+  },
+  {
+    "id": "Meiling_Chen",
+    "name": "Meiling Chen",
+    "weight": 82,
+    "role": "Incoming M.Sc. Student",
+    "user_groups": ["M.Sc. Students"],
+    "email": "meiling.chen@rcvlab.edu",
+    "social": [
+      {
+        "icon": "envelope",
+        "icon_pack": "fas",
+        "link": "mailto:meiling.chen@rcvlab.edu"
+      },
+      {
+        "icon_pack": "fab",
+        "icon": "github",
+        "link": "https://github.com/meiling-chen"
+      }
+    ],
+    "bio": "Meiling is joining as a master's student to explore human-robot interaction for service robots. She has built interactive perception demos and leads outreach workshops for younger students.",
+    "research": [
+      "Situated dialogue for mobile assistants",
+      "Social navigation and intent prediction",
+      "Evaluation of user trust in assistive robots"
+    ],
+    "publications": [
+      "Chen, M., et al. \"Interactive Perception Benchmarks for Service Robots.\" Under review, 2025. [[Paper]](https://arxiv.org/abs/2501.04567)"
+    ]
+  },
+  {
+    "id": "Haoran_Zhou",
+    "name": "Haoran Zhou",
+    "weight": 83,
+    "role": "Undergraduate Researcher",
+    "user_groups": ["Undergraduate Students"],
+    "email": "haoran.zhou@rcvlab.edu",
+    "social": [
+      {
+        "icon": "envelope",
+        "icon_pack": "fas",
+        "link": "mailto:haoran.zhou@rcvlab.edu"
+      },
+      {
+        "icon_pack": "fab",
+        "icon": "linkedin",
+        "link": "https://www.linkedin.com/in/haoran-zhou-robotics"
+      }
+    ],
+    "bio": "Haoran is an undergraduate researcher who supports embedded perception projects. He maintains lab dashboards and enjoys rapid prototyping with Jetson boards.",
+    "research": [
+      "Efficient stereo depth on edge devices",
+      "Telemetry and health monitoring for field robots",
+      "Dataset tooling for labeling and QA"
+    ],
+    "publications": [
+      "Zhou, H., et al. \"Edge-Friendly Stereo Pipelines for Field Robotics.\" Student Technical Report, 2024. [[Paper]](https://arxiv.org/abs/2409.05521)"
+    ]
+  }
+]

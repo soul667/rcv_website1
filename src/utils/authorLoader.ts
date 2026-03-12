@@ -31,6 +31,47 @@ export interface AuthorData {
   markdownContent?: string; // 添加完整的markdown内容
 }
 
+type AuthorIndexEntry = string | { id: string; weight?: number };
+
+const FALLBACK_AUTHOR_DIRS: string[] = [
+  'Aoxiang_Gu', 'Bingxi_Liu', 'Bolin_Zou', 'Changfei_Fu', 'Chengjie_Zhang', 
+  'Dehao_Huang', 'Guangcheng_Chen', 'Hanjing_Ye', 'Hejun_Wei', 'Hong_Zhang',
+  'Huaqi_Tao', 'Jiamin_Zheng', 'Jiarui_Xu', 'Jingwen_Yu', 'Li-He',
+  'Lihuang_Fang', 'Luyao_Liu', 'Mingzhe_Lv', 'Qianer_Li', 'Senzi_Luo',
+  'Tianle_Zeng', 'Tingcui_Yan', 'Weinan_Chen', 'Weixi_Situ', 'Wenlong_Dong',
+  'Yanci_wen', 'Yicheng_He', 'Yu_Zhan', 'Yufan_Mao', 'Zanjia_Tong',
+  'Lina_Sun', 'Ravi_Patel', 'Meiling_Chen', 'Haoran_Zhou'
+];
+
+async function getAuthorDirectories(): Promise<string[]> {
+  try {
+    const response = await fetch(getAssetUrl('data/authors.json'));
+    if (!response.ok) {
+      throw new Error(`Failed to load authors.json (${response.status})`);
+    }
+
+    const payload = await response.json();
+    let ids: string[] = [];
+
+    if (Array.isArray(payload)) {
+      ids = payload.map((entry) => String(entry).trim()).filter(Boolean);
+    } else if (Array.isArray((payload as { authors?: AuthorIndexEntry[] }).authors)) {
+      ids = (payload as { authors: AuthorIndexEntry[] }).authors
+        .map((entry) => (typeof entry === 'string' ? entry : entry?.id))
+        .map((id) => (id ? String(id).trim() : ''))
+        .filter(Boolean);
+    }
+
+    if (ids.length > 0) {
+      return Array.from(new Set(ids));
+    }
+  } catch (error) {
+    console.warn('Falling back to built-in author list:', error);
+  }
+
+  return FALLBACK_AUTHOR_DIRS;
+}
+
 function extractSocialLinks(content: string): { icon: string; icon_pack: string; link: string }[] {
   const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
   if (!frontmatterMatch) return [];
@@ -385,16 +426,8 @@ export async function loadAuthorData(authorId: string): Promise<AuthorData | nul
 
 // Load all authors
 export async function loadAllAuthors(): Promise<AuthorData[]> {
-  // Get list of author directories
-  const authorDirs = [
-    'Aoxiang_Gu', 'Bingxi_Liu', 'Bolin_Zou', 'Changfei_Fu', 'Chengjie_Zhang', 
-    'Dehao_Huang', 'Guangcheng_Chen', 'Hanjing_Ye', 'Hejun_Wei', 'Hong_Zhang',
-    'Huaqi_Tao', 'Jiamin_Zheng', 'Jiarui_Xu', 'Jingwen_Yu', 'Li-He',
-    'Lihuang_Fang', 'Luyao_Liu', 'Mingzhe_Lv', 'Qianer_Li', 'Senzi_Luo',
-    'Tianle_Zeng', 'Tingcui_Yan', 'Weinan_Chen', 'Weixi_Situ', 'Wenlong_Dong',
-    'Yanci_wen', 'Yicheng_He', 'Yu_Zhan', 'Yufan_Mao', 'Zanjia_Tong'
-  ];
-  
+  const authorDirs = await getAuthorDirectories();
+
   // Load all authors in parallel instead of sequentially
   const results = await Promise.all(
     authorDirs.map(authorId => loadAuthorData(authorId))

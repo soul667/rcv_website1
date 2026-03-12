@@ -68,6 +68,10 @@
       "scripts": {
             "dev": "vite",
             "build": "vite build",
-            "deploy": "gh-pages -d dist"
+            "deploy": "gh-pages -d dist",
+            "members:add-test": "node scripts/add_test_members.js",
+            "members:remove-test": "node scripts/remove_test_members.js",
+            "members:sync-index": "node scripts/sync_authors_index.js",
+            "test:members": "node test/validate-members.js"
       }
 }
