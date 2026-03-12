@@ -1,3 +1,12 @@
+---
+# Fill in the fields below to create a basic custom agent for your repository.
+# The Copilot CLI can be used for local testing: https://gh.io/customagents/cli
+# To make this agent available, merge this file into the default repository branch.
+# For format details, see: https://gh.io/customagents/config
+
+name: research_fix1
+description: 优化 RCV Website 的 Research 页面、Team 成员详情页及 Home 页面的交互与设计，提升移动端体验，并统一渲染风格。
+---
 # 任务：研究页面 (Research Page) 与 成员页面 (Team Page) 的优化与 Debug
 
 ## 核心任务目标
