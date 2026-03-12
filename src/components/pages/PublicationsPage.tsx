@@ -103,7 +103,8 @@ function StatCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, delay, ease: [0.23, 1, 0.32, 1] }}
-      className="relative group overflow-hidden rounded-xl border border-white/[0.08] bg-[#2a2a35]/40 backdrop-blur-xl p-4 transition-all duration-500 hover:border-white/[0.2] hover:bg-white/[0.05]"
+      className="relative group overflow-hidden rounded-xl border border-white/10 p-4 transition-all duration-500 hover:border-white/20"
+      style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)' }}
     >
       <div className="absolute -right-2 -top-2 w-16 h-16 opacity-[0.05] group-hover:opacity-[0.1] transition-all duration-700 pointer-events-none group-hover:scale-125 group-hover:-rotate-12">
         <Icon className="w-full h-full text-white" />
@@ -127,7 +128,14 @@ function YearSection({ year }: { year: number }) {
   return (
     <div className="sticky top-0 z-20 pt-8 pb-4 bg-gray-900">
       <div className="flex items-center gap-6">
-        <span className="text-3xl font-light tracking-tighter text-white/80 font-mono italic opacity-90">{year}</span>
+        <span
+          className="text-4xl text-white/90"
+          style={{
+            fontFamily: '"Noto Serif SC", "Georgia", serif',
+            fontWeight: 200,
+            letterSpacing: '0.05em',
+          }}
+        >{year}</span>
         <div className="flex-1 h-px bg-gradient-to-r from-white/[0.15] to-transparent" />
       </div>
     </div>
@@ -162,7 +170,7 @@ function PublicationCard({ pub, index, t, authors }: {
     });
 
     if (matchedAuthor) {
-      navigateTo('member-profile', { memberId: matchedAuthor.id, previousPage: 'publications' });
+      navigateTo('member-profile', matchedAuthor);
     }
   };
 
@@ -175,9 +183,13 @@ function PublicationCard({ pub, index, t, authors }: {
       transition={{ duration: 0.5, delay: index * 0.05, ease: [0.23, 1, 0.32, 1] }}
       className={`group relative rounded-2xl border transition-all duration-500 overflow-hidden
         ${pub.highlighted
-          ? "border-white/[0.18] bg-white/[0.04] hover:border-white/40 hover:bg-white/[0.06] shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
-          : "border-white/[0.08] bg-[#2a2a35]/20 hover:border-white/[0.15] hover:bg-[#2a2a35]/40"
+          ? "border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
+          : "border-white/10"
         }`}
+      style={{
+        background: 'rgba(255,255,255,0.03)',
+        backdropFilter: 'blur(20px)',
+      }}
     >
       {/* Visual Accents */}
       {pub.highlighted && (
@@ -440,7 +452,8 @@ export function PublicationsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.5 }}
-                className="bg-gray-900 border border-white/[0.08] rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.5)] overflow-hidden"
+                className="border border-white/10 rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.3)] overflow-hidden"
+                style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)' }}
               >
                 {/* Desktop: single row | Mobile: search on top, filters below */}
                 <div className="flex flex-col md:flex-row md:items-center">
