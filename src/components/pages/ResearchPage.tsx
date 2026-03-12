@@ -1,9 +1,20 @@
 import { useLanguage } from '../LanguageContext';
 import { useRouter } from '../Router';
 import { BackButton } from '../BackButton';
+import { ImageWithFallback } from '../figma/ImageWithFallback';
 import { useState, useEffect, useCallback } from 'react';
 import { loadResearchAreas, ResearchArea } from '../../utils/researchLoader';
 import { ChevronRight, Users, Tag } from 'lucide-react';
+
+// Load Noto Serif SC for elegant Chinese rendering
+const FONT_LINK_ID = 'noto-serif-sc-link';
+if (typeof document !== 'undefined' && !document.getElementById(FONT_LINK_ID)) {
+  const link = document.createElement('link');
+  link.id = FONT_LINK_ID;
+  link.rel = 'stylesheet';
+  link.href = 'https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300&display=swap';
+  document.head.appendChild(link);
+}
 
 export function ResearchPage() {
   const { language, t } = useLanguage();
@@ -88,7 +99,7 @@ export function ResearchPage() {
     <div 
       className="min-h-screen pt-24 pb-20 relative overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, #0a0f1e 0%, #0d1526 40%, #111827 100%)',
+        backgroundColor: '#1c1c1f',
       }}
     >
       {/* Ambient glow */}
@@ -103,14 +114,33 @@ export function ResearchPage() {
         <BackButton onClick={() => navigateTo('home')} className="mb-8 hover:bg-white/10 text-white/70 hover:text-white border-white/10 transition-all" />
 
         {/* Page Header */}
-        <div className="text-center mb-14">
-          <p className="text-xs font-semibold tracking-[0.3em] text-white/40 uppercase mb-3">
-            {language === 'zh' ? '探索我们的' : 'Explore Our'}
-          </p>
-          <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight">
-             {t('research.title')}
+        <div className="text-center mb-16 select-none">
+          <div className="inline-block mb-4">
+            <span 
+              className="text-[10px] sm:text-xs tracking-[0.2em] text-white/60 uppercase font-light border border-white/10 px-3.5 py-1 rounded-full backdrop-blur-sm bg-white/5"
+              style={{
+                fontFamily: language === 'zh'
+                  ? '"Microsoft YaHei", "微软雅黑", sans-serif'
+                  : 'inherit',
+                letterSpacing: language === 'zh' ? '0.3em' : '0.2em'
+              }}
+            >
+              {language === 'zh' ? '研究领域' : 'Our Research'}
+            </span>
+          </div>
+          
+          <h1 
+            className="text-4xl md:text-6xl font-extralight tracking-wide text-white leading-tight block"
+            style={{
+              fontWeight: 200,
+              letterSpacing: language === 'zh' ? '0.08em' : '0.04em',
+              fontFamily: language === 'zh'
+                ? '"Microsoft YaHei", "微软雅黑", sans-serif'
+                : 'inherit',
+            }}
+          >
+            {t('research.title')}
           </h1>
-          <div className="mt-4 w-16 h-px mx-auto bg-gradient-to-r from-transparent via-white/30 to-transparent" />
         </div>
 
         {/* Desktop View: Sidebar + Detail Panel */}
@@ -179,17 +209,6 @@ export function ResearchPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1e] via-transparent to-transparent opacity-80" />
               <div className="absolute bottom-0 left-0 right-0 p-10">
-                <div 
-                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] uppercase tracking-widest font-bold mb-4"
-                  style={{
-                    background: `${active.meta.color}22`,
-                    color: active.meta.color,
-                    border: `1px solid ${active.meta.color}44`,
-                  }}
-                >
-                  <span className="w-1 h-1 rounded-full bg-current animate-pulse" />
-                   {language === 'zh' ? `研究方向 0${activeIndex + 1}` : `Direction 0${activeIndex + 1}`}
-                </div>
                 <h2 className="text-4xl font-bold text-white drop-shadow-lg">
                   {language === 'zh' ? active.meta.title_zh : active.meta.title}
                 </h2>
@@ -239,22 +258,15 @@ export function ResearchPage() {
                       {language === 'zh' ? '相关实验室成员' : 'Related Lab Members'}
                     </span>
                   </div>
-                  <div className="grid grid-cols-1 gap-2">
+                  <div className="flex flex-wrap gap-2">
                     {active.members.map((member, mi) => (
                       <button
                         key={mi}
                         onClick={() => handleMemberClick(member.slug)}
-                        className="group flex items-center justify-between px-5 py-4 rounded-xl text-left transition-all duration-300 border border-white/5 hover:border-white/20 bg-white/[0.02] hover:bg-white/[0.04]"
+                        title={language === 'zh' ? member.topic_zh : member.topic}
+                        className="px-4 py-1.5 rounded-lg text-xs font-medium border transition-all duration-300 bg-white/[0.03] border-white/10 text-white/70 hover:text-white hover:border-white/30 hover:bg-white/10"
                       >
-                        <div className="flex flex-col">
-                          <span className="text-sm font-bold text-white/90 group-hover:text-white">
-                            {member.name}
-                          </span>
-                          <span className="text-xs text-white/40 mt-1 line-clamp-1">
-                            {language === 'zh' ? member.topic_zh : member.topic}
-                          </span>
-                        </div>
-                        <ChevronRight className="h-4 w-4 text-white/10 group-hover:text-white/40 group-hover:translate-x-1 transition-all" />
+                        {member.name}
                       </button>
                     ))}
                   </div>
@@ -280,24 +292,42 @@ export function ResearchPage() {
                   <p className="text-white/60 text-sm leading-relaxed mb-6">
                     {language === 'zh' ? area.description.zh : area.description.en}
                   </p>
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {area.keywords.map((kw, ki) => (
-                      <span key={ki} className="text-[10px] px-2 py-1 rounded border border-white/10 text-white/40">
-                        {language === 'zh' ? kw.zh : kw.en}
+                  {/* Mobile Keywords */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-1 h-3 bg-white/20 rounded-full" />
+                      <span className="text-[10px] font-bold tracking-widest text-white/30 uppercase">
+                        {language === 'zh' ? '关键词' : 'Keywords'}
                       </span>
-                    ))}
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {area.keywords.map((kw, ki) => (
+                        <span key={ki} className="text-[10px] px-2 py-1 rounded border border-white/10 text-white/40">
+                          {language === 'zh' ? kw.zh : kw.en}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    {area.members.map((member, mi) => (
-                      <button 
-                        key={mi} 
-                        onClick={() => handleMemberClick(member.slug)}
-                        className="w-full flex justify-between items-center p-3 rounded-lg bg-white/5 border border-white/5 text-sm"
-                      >
-                        <span className="text-white/80 font-medium">{member.name}</span>
-                        <ChevronRight className="h-3 w-3 text-white/20" />
-                      </button>
-                    ))}
+
+                  {/* Mobile Members */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-1 h-3 bg-white/20 rounded-full" />
+                      <span className="text-[10px] font-bold tracking-widest text-white/30 uppercase">
+                        {language === 'zh' ? '相关实验室成员' : 'Related Lab Members'}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {area.members.map((member, mi) => (
+                        <button 
+                          key={mi} 
+                          onClick={() => handleMemberClick(member.slug)}
+                          className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs text-white/60 active:bg-white/20 transition-colors"
+                        >
+                          {member.name}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
              </div>

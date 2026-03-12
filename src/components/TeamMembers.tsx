@@ -11,6 +11,7 @@ import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import alumniZh from '../../assets/docs/alumni_zh.md?raw';
 import alumniEn from '../../assets/docs/alumni_en.md?raw';
+import { AnimatePresence, motion } from 'framer-motion';
 
 // Module-level cache for author data
 let cachedAuthors: AuthorData[] | null = null;
@@ -58,6 +59,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
   const [viewportWidth, setViewportWidth] = useState(() => window.innerWidth);
   const teamCarouselConfig = getTeamCarouselConfig();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [direction, setDirection] = useState<1 | -1>(1);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
   useEffect(() => {
@@ -73,6 +75,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
   useEffect(() => {
     if (teamCarouselConfig.autoPlay) {
       const timer = setInterval(() => {
+        setDirection(1);
         setCurrentSlide((prev) => (prev + 1) % teamCarouselConfig.slides.length);
       }, teamCarouselConfig.slideDuration);
       return () => clearInterval(timer);
@@ -80,10 +83,12 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
   }, [teamCarouselConfig.autoPlay, teamCarouselConfig.slideDuration, teamCarouselConfig.slides.length]);
 
   const nextSlide = () => {
+    setDirection(1);
     setCurrentSlide((prev) => (prev + 1) % teamCarouselConfig.slides.length);
   };
 
   const prevSlide = () => {
+    setDirection(-1);
     setCurrentSlide((prev) => (prev - 1 + teamCarouselConfig.slides.length) % teamCarouselConfig.slides.length);
   };
 
@@ -168,14 +173,32 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
           >
-            {/* Background Image */}
-            <div className="relative h-64 lg:h-80">
-              <ImageWithFallback
-                src={teamCarouselConfig.slides[currentSlide].image}
-                alt={teamCarouselConfig.slides[currentSlide].alt}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/40"></div>
+            {/* Background Image Area */}
+            <div className="relative h-64 lg:h-80 overflow-hidden">
+              <AnimatePresence initial={false} custom={direction} mode="popLayout">
+                <motion.div
+                  key={currentSlide}
+                  custom={direction}
+                  initial={{ opacity: 0, x: direction * 100 }}
+                  animate={{ 
+                    opacity: 1, 
+                    x: 0,
+                    transition: {
+                      x: { type: "spring", stiffness: 300, damping: 30 },
+                      opacity: { duration: 0.5 }
+                    }
+                  }}
+                  exit={{ opacity: 0, x: direction * -100 }}
+                  className="absolute inset-0"
+                >
+                  <ImageWithFallback
+                    src={teamCarouselConfig.slides[currentSlide].image}
+                    alt={teamCarouselConfig.slides[currentSlide].alt}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/40"></div>
+                </motion.div>
+              </AnimatePresence>
             </div>
 
             {/* Navigation Arrows */}

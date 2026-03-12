@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { useLanguage } from './LanguageContext';
 import { getHeroConfig } from '../utils/config';
@@ -16,6 +17,7 @@ if (typeof document !== 'undefined' && !document.getElementById(FONT_LINK_ID)) {
 
 export function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [direction, setDirection] = useState<1 | -1>(1);
   const { t, language } = useLanguage();
   const heroConfig = getHeroConfig();
   const sectionRef = useRef<HTMLElement>(null);
@@ -25,6 +27,7 @@ export function Hero() {
   useEffect(() => {
     if (heroConfig.autoPlay) {
       const timer = setInterval(() => {
+        setDirection(1);
         setCurrentSlide((prev) => (prev + 1) % heroConfig.slides.length);
       }, heroConfig.slideDuration);
       return () => clearInterval(timer);
@@ -87,31 +90,51 @@ export function Hero() {
   };
 
   const nextSlide = () => {
+    setDirection(1);
     setCurrentSlide((prev) => (prev + 1) % heroConfig.slides.length);
   };
 
   const prevSlide = () => {
+    setDirection(-1);
     setCurrentSlide((prev) => (prev - 1 + heroConfig.slides.length) % heroConfig.slides.length);
   };
 
   return (
     <section ref={sectionRef} id="home" className="relative h-screen overflow-hidden">
       {/* Background Image */}
-      <div className="absolute inset-0">
-        <ImageWithFallback
-          src={heroConfig.slides[currentSlide].image}
-          alt={heroConfig.slides[currentSlide].alt}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/70 to-black/80"></div>
+      <div className="absolute inset-0 overflow-hidden">
+        <AnimatePresence initial={false} custom={direction} mode="popLayout">
+          <motion.div
+            key={currentSlide}
+            custom={direction}
+            initial={{ opacity: 0, x: direction * 100 }}
+            animate={{ 
+              opacity: 1, 
+              x: 0,
+              transition: {
+                x: { type: "spring", stiffness: 300, damping: 30 },
+                opacity: { duration: 0.5 }
+              }
+            }}
+            exit={{ opacity: 0, x: direction * -100 }}
+            className="absolute inset-0"
+          >
+            <ImageWithFallback
+              src={heroConfig.slides[currentSlide].image}
+              alt={heroConfig.slides[currentSlide].alt}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/70 to-black/80"></div>
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* Content */}
       <div className="relative z-10 h-full flex items-center justify-center">
         <div className="text-center text-white max-w-5xl mx-auto px-6 flex flex-col items-center gap-5">
           {/* Label badge */}
-          <span className="text-xs md:text-sm tracking-[0.3em] text-white/60 uppercase font-light border border-white/20 px-4 py-1.5 rounded-full backdrop-blur-sm bg-white/5">
-            {t('hero.subtitle')}
+          <span className="text-[10px] md:text-xs tracking-[0.3em] text-white/60 uppercase font-light border border-white/10 px-3 py-1 rounded-full backdrop-blur-sm bg-white/5">
+            RCV LAB
           </span>
 
           {/* Main title */}
@@ -122,7 +145,7 @@ export function Hero() {
               fontWeight: 200,
               letterSpacing: language === 'zh' ? '0.08em' : '0.04em',
               fontFamily: language === 'zh'
-                ? "'Noto Serif SC', 'Noto Sans SC', serif"
+                ? '"Microsoft YaHei", "微软雅黑", sans-serif'
                 : 'inherit',
             }}
           >
