@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-12T15:11:56.499Z",
+  "generatedAt": "2026-03-12T15:38:57.148Z",
   "authors": [
     {
       "id": "Hong_Zhang",
@@ -120,22 +120,6 @@
     {
       "id": "Weinan_Chen",
       "weight": 30
-    },
-    {
-      "id": "Lina_Sun",
-      "weight": 80
-    },
-    {
-      "id": "Ravi_Patel",
-      "weight": 81
-    },
-    {
-      "id": "Meiling_Chen",
-      "weight": 82
-    },
-    {
-      "id": "Haoran_Zhou",
-      "weight": 83
     }
   ]
 }
