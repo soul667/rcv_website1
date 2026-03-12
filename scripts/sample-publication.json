@@ -1,0 +1,13 @@
+{
+  "title": "Sample Title for New Publication",
+  "authors": ["First Author", "Second Author"],
+  "venue": "2026 IEEE Robotics Conference",
+  "date": "2026-01-15",
+  "type": "conference",
+  "abstract": "Short abstract describing the contribution of the paper.",
+  "doi": "10.1234/sample.doi",
+  "url": "https://arxiv.org/abs/0000.00000",
+  "tags": ["robotics", "vision"],
+  "featured": false,
+  "id": "optional-custom-slug"
+}

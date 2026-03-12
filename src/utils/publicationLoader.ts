@@ -1,6 +1,6 @@
 import { parse } from 'yaml';
 import { Publication } from './bibParser'; // Re-use the existing interface or define a new one
-import { getContentUrl } from './paths';
+import { getAssetUrl, getContentUrl } from './paths';
 
 export interface YamlPublication {
   id: string; // Used internally as key (folder name)
@@ -16,8 +16,7 @@ export interface YamlPublication {
   highlighted?: boolean;
 }
 
-// Full list of publication folders to load (extracted from the filesystem)
-const publicationFolders = [
+const FALLBACK_PUBLICATIONS = [
   "an-2022-deep", "an-2023-open", "chen-2020-ceb", "chen-2021-dynamic",
   "chen-2021-robustness", "chen-2022-perspective", "chen-2023-cloud",
   "chen-2023-rumination", "chen-2024-cloud", "chen-2024-polarimetric",
@@ -37,8 +36,26 @@ const publicationFolders = [
   "zhou-2022-ndd"
 ];
 
+async function getPublicationFolders(): Promise<string[]> {
+  try {
+    const res = await fetch(getAssetUrl('data/publications.json'));
+    if (!res.ok) {
+      throw new Error(`Failed to load publications.json (${res.status})`);
+    }
+    const payload = await res.json();
+    const list = Array.isArray(payload?.publications) ? payload.publications : Array.isArray(payload) ? payload : [];
+    if (list.length) {
+      return list.map((id: any) => String(id)).filter(Boolean);
+    }
+  } catch (err) {
+    console.warn('Falling back to bundled publication list:', err);
+  }
+  return FALLBACK_PUBLICATIONS;
+}
+
 export async function loadAllYamlPublications(): Promise<YamlPublication[]> {
   try {
+    const publicationFolders = await getPublicationFolders();
     const pubPromises = publicationFolders.map(async (folder) => {
       try {
         // Fetch YAML file

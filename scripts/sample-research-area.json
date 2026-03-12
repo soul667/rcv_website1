@@ -1,0 +1,20 @@
+{
+  "title": "Sample Research Area",
+  "title_zh": "示例研究方向",
+  "weight": 10,
+  "image": "featured.png",
+  "color": "#4F8EF7",
+  "description": {
+    "en": "English description of the research direction.",
+    "zh": "研究方向的中文描述。"
+  },
+  "keywords": [
+    { "en": "Robotics", "zh": "机器人" },
+    { "en": "Perception", "zh": "感知" }
+  ],
+  "members": [
+    { "name": "Jane Doe", "slug": "jane_doe", "topic": "sample topic", "topic_zh": "示例主题" }
+  ],
+  "folder": "sample-research-area",
+  "image_src": "" 
+}

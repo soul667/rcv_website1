@@ -72,6 +72,12 @@
             "members:add-test": "node scripts/add_test_members.js",
             "members:remove-test": "node scripts/remove_test_members.js",
             "members:sync-index": "node scripts/sync_authors_index.js",
-            "test:members": "node test/validate-members.js"
+            "publications:add": "node scripts/add_publication.js",
+            "publications:sync": "node scripts/sync_publications_index.js",
+            "research:add": "node scripts/add_research_area.js",
+            "hero:slides": "node scripts/generate_hero_slides_snippet.js",
+            "test:members": "node test/validate-members.js",
+            "test:publications": "node test/validate-publications.js",
+            "test:content": "npm run test:members && npm run test:publications"
       }
 }

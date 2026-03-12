@@ -29,6 +29,27 @@ Each `_index.md` frontmatter should include `title`, `role`, and `user_groups` (
 - `npm run build` to confirm the site still compiles.
 - Optional: `npm run dev` and check the Team page carousel and categories (Faculty, Ph.D., M.Sc., Undergraduate, etc.) for your new entries.
 
+## Home hero (首图) — images & text
+- Images: `public/assets/media/home_slides/`. Use `npm run hero:slides` to print a ready-to-paste slides array for `src/utils/config.ts` (hero or team carousel).
+- Text: translations live in `src/components/LanguageContext.tsx` keys `hero.title`, `hero.subtitle`, `hero.description1/2`. Edit both EN & ZH blocks to keep them in sync.
+- Config: `src/utils/config.ts` exports `defaultHeroConfig` and `defaultTeamCarouselConfig`. Replace `slides` entries with the snippet above and adjust `autoPlay/slideDuration` if desired.
+
+## Publications — adding and indexing
+- Source of truth: one folder per publication at `public/content/publication/<slug>/index.yaml`.
+- Simplified import: prepare JSON (see `scripts/sample-publication.json`) and run `npm run publications:add -- ./path/to/your.json`. The script:
+  - Creates/updates the folder and `index.yaml`
+  - Maps `type` → `publication_types` (conference=1, journal=2, preprint=3)
+  - Refreshes `public/assets/data/publications.json` for the frontend loader
+- Manually added folders: run `npm run publications:sync` to regenerate the index.
+- Validation: `npm run test:publications` ensures the index matches the directories.
+
+## Research directions — images & descriptions
+- Each area lives in `public/content/research/<folder>/index.toml` with sections `[meta]`, `[description]`, `[[keywords]]`, and `[[members]]`. The `meta.image` can point to:
+  - An absolute path under `/content/research/<folder>/...` (preferred),
+  - Or a filename in the same folder.
+- Simplified import: prepare JSON (see `scripts/sample-research-area.json`) and run `npm run research:add -- ./path/to/area.json`. Optional `image_src` copies an image into the folder and rewrites `meta.image` to the correct path.
+- Ordering: set `meta.weight` (lower shows first).
+
 ## How categorization works
 - `src/utils/authorLoader.ts` fetches `public/assets/data/authors.json` (falls back to a built-in list) to know which profile folders to load.
 - The `user_groups` array in each profile drives grouping. The role string is a secondary fallback (contains `phd`, `m.sc.`, `research associate`, or `administrative assistant`).
@@ -44,7 +65,14 @@ Each `_index.md` frontmatter should include `title`, `role`, and `user_groups` (
   - `npm run members:add-test` – generate the batch of test members and refresh `authors.json`
   - `npm run members:remove-test` – delete the generated test members
   - `npm run members:sync-index` – rebuild `public/assets/data/authors.json` from existing profiles
-- Validation: `npm run test:members`
+- Publications helpers:
+  - `npm run publications:add -- ./your.json` – add/update a publication folder from JSON
+  - `npm run publications:sync` – rebuild `public/assets/data/publications.json` from existing publication folders
+- Research helper:
+  - `npm run research:add -- ./your.json` – scaffold/update a research area TOML (and optionally copy an image)
+- Hero helper:
+  - `npm run hero:slides` – print a slides array based on files in `public/assets/media/home_slides/` to paste into `src/utils/config.ts`
+- Validation: `npm run test:members`, `npm run test:publications`, or `npm run test:content`
 - Test member dataset: `scripts/test-members-data.json`
 
 ## Future improvements
