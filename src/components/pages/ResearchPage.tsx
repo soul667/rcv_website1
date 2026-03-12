@@ -87,10 +87,10 @@ export function ResearchPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0f1e] flex items-center justify-center">
+      <div className="theme-page theme-page-gradient min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white/20 mx-auto mb-4"></div>
-          <p className="text-white/60">Loading Research Areas...</p>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[color:var(--border-strong)] mx-auto mb-4"></div>
+          <p className="theme-soft">Loading Research Areas...</p>
         </div>
       </div>
     );
@@ -98,12 +98,12 @@ export function ResearchPage() {
 
   if (error || areas.length === 0) {
     return (
-      <div className="min-h-screen bg-[#0a0f1e] flex items-center justify-center">
+      <div className="theme-page theme-page-gradient min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-400 text-xl mb-6">{error || 'No research areas found'}</p>
           <button 
             onClick={() => window.location.reload()} 
-            className="px-6 py-2 bg-white/10 hover:bg-white/20 text-white rounded-full border border-white/10 transition-colors"
+            className="theme-icon-button px-6 py-2 rounded-full transition-colors"
           >
             Retry
           </button>
@@ -116,23 +116,20 @@ export function ResearchPage() {
 
   return (
     <div 
-      className="min-h-screen pt-24 pb-20 relative overflow-hidden"
-      style={{
-        backgroundColor: '#1c1c1f',
-      }}
+      className="theme-page theme-page-gradient min-h-screen pt-24 pb-20 relative overflow-hidden"
     >
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <BackButton onClick={() => navigateTo('home')} className="md:hidden mb-8 hover:bg-white/10 text-white/70 hover:text-white border-white/10 transition-all" />
+        <BackButton onClick={() => navigateTo('home')} className="md:hidden mb-8 transition-all" />
 
         {/* Page Header */}
         <div className="text-center mb-16 select-none">
           <div className="inline-block mb-4">
-            <span 
-              className="text-[10px] sm:text-xs tracking-[0.2em] text-white/60 uppercase font-light border border-white/10 px-3.5 py-1 rounded-full backdrop-blur-sm bg-white/5"
-              style={{
-                fontFamily: language === 'zh'
-                  ? '"Microsoft YaHei", "微软雅黑", sans-serif'
+              <span 
+                className="theme-pill text-[10px] sm:text-xs tracking-[0.2em] uppercase font-light px-3.5 py-1 rounded-full backdrop-blur-sm"
+                style={{
+                  fontFamily: language === 'zh'
+                    ? '"Microsoft YaHei", "微软雅黑", sans-serif'
                   : 'inherit',
                 letterSpacing: language === 'zh' ? '0.3em' : '0.2em'
               }}
@@ -142,7 +139,7 @@ export function ResearchPage() {
           </div>
           
           <h1 
-            className="text-4xl md:text-6xl font-extralight tracking-wide text-white leading-tight block"
+            className="text-4xl md:text-6xl font-extralight tracking-wide text-[color:var(--foreground)] leading-tight block"
             style={{
               fontWeight: 200,
               letterSpacing: language === 'zh' ? '0.08em' : '0.04em',
@@ -160,9 +157,8 @@ export function ResearchPage() {
           {/* Left Sidebar Tabs */}
           <div className="w-80 flex-shrink-0">
             <div
-              className="rounded-2xl overflow-hidden border border-white/10 sticky top-28"
+              className="theme-surface rounded-2xl overflow-hidden sticky top-28"
               style={{
-                background: 'rgba(255,255,255,0.03)',
                 backdropFilter: 'blur(20px)',
               }}
             >
@@ -172,21 +168,21 @@ export function ResearchPage() {
                   <button
                     key={i}
                     onClick={() => handleTabChange(i)}
-                    className={`relative w-full text-left px-6 py-5 transition-all duration-300 flex items-center justify-between group border-b border-white/5 last:border-b-0 overflow-hidden ${
+                    className={`relative w-full text-left px-6 py-5 transition-all duration-300 flex items-center justify-between group border-b theme-divider last:border-b-0 overflow-hidden ${
                       isActive 
-                        ? 'bg-white/10 shadow-[inset_2px_0_0_0_rgba(255,255,255,0.8)]' 
-                        : 'hover:bg-white/5 hover:translate-x-1'
+                        ? 'bg-[var(--overlay-strong)] shadow-[inset_2px_0_0_0_rgba(203,116,59,0.8)]' 
+                        : 'hover:bg-[var(--overlay)] hover:translate-x-1'
                     }`}
                   >
                     {isActive && (
                       <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#CB743B] shadow-[0_0_10px_rgba(203,116,59,0.5)]" />
                     )}
                     <div className="flex-1 min-w-0 z-10">
-                      <p
-                        className={`text-sm font-semibold transition-colors duration-200 ${
-                          isActive ? 'text-white' : 'text-white/40 group-hover:text-white/80'
-                        }`}
-                      >
+                        <p
+                          className={`text-sm font-semibold transition-colors duration-200 ${
+                            isActive ? 'text-[color:var(--foreground)]' : 'theme-muted group-hover:text-[color:var(--foreground-soft)]'
+                          }`}
+                        >
                         {language === 'zh' ? area.meta.title_zh : area.meta.title}
                       </p>
                     </div>
@@ -198,11 +194,10 @@ export function ResearchPage() {
 
           {/* Right Detail Panel */}
           <div
-            className={`flex-1 rounded-2xl overflow-hidden border border-white/10 min-h-[600px] flex flex-col transition-all duration-300 ${
+            className={`theme-surface flex-1 rounded-2xl overflow-hidden min-h-[600px] flex flex-col transition-all duration-300 ${
               animating ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'
             }`}
             style={{
-              background: 'rgba(255,255,255,0.03)',
               backdropFilter: 'blur(32px)',
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
             }}
@@ -214,7 +209,7 @@ export function ResearchPage() {
                 alt={active.meta.title}
                 className="w-full h-full rounded-none"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1c1c1f] via-transparent to-transparent opacity-80" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)] via-transparent to-transparent opacity-80" />
               <div className="absolute bottom-0 left-0 right-0 p-10">
                 <h2 className="text-4xl font-bold text-white drop-shadow-lg">
                   {language === 'zh' ? active.meta.title_zh : active.meta.title}
@@ -226,7 +221,7 @@ export function ResearchPage() {
             <div className="p-10 space-y-10">
               {/* Description */}
               <div className="max-w-4xl markdown-custom-wrapper">
-                <div className="markdown-body p-0 bg-transparent text-white/70">
+                <div className="markdown-body p-0 bg-transparent theme-soft">
                   <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
                     {language === 'zh' ? active.description.zh : active.description.en}
                   </ReactMarkdown>
@@ -238,16 +233,16 @@ export function ResearchPage() {
                 <div>
                   <div className="flex items-center gap-2 mb-4">
                     <Tag className="h-4 w-4 text-[#CB743B]/60" />
-                    <span className="text-lg font-semibold tracking-wider text-white/80">
+                    <span className="text-lg font-semibold tracking-wider text-[color:var(--foreground-soft)]">
                       {language === 'zh' ? '领域关键词' : 'Keywords'}
                     </span>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {active.keywords.map((kw, ki) => (
-                      <span
-                        key={ki}
-                        className="px-4 py-1.5 rounded-lg text-xs font-medium border border-white/10 bg-white/[0.05] text-white/60 transition-colors hover:bg-white/10 hover:text-white/80"
-                      >
+                        <span
+                          key={ki}
+                          className="theme-pill px-4 py-1.5 rounded-lg text-xs font-medium transition-colors hover:bg-[var(--overlay-strong)] hover:text-[color:var(--foreground)]"
+                        >
                         {language === 'zh' ? kw.zh : kw.en}
                       </span>
                     ))}
@@ -258,7 +253,7 @@ export function ResearchPage() {
                 <div>
                   <div className="flex items-center gap-2 mb-4">
                     <Users className="h-4 w-4 text-[#CB743B]/60" />
-                    <span className="text-lg font-semibold tracking-wider text-white/80">
+                    <span className="text-lg font-semibold tracking-wider text-[color:var(--foreground-soft)]">
                       {language === 'zh' ? '相关实验室成员' : 'Related Lab Members'}
                     </span>
                   </div>
@@ -268,7 +263,7 @@ export function ResearchPage() {
                         key={mi}
                         onClick={() => handleMemberClick(member.slug)}
                         title={language === 'zh' ? member.topic_zh : member.topic}
-                        className="px-4 py-1.5 rounded-lg text-xs font-medium border transition-all duration-300 bg-white/[0.03] border-white/10 text-white/70 hover:text-white hover:border-white/30 hover:bg-white/10"
+                        className="theme-pill px-4 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 hover:text-[color:var(--foreground)] hover:border-[color:var(--border-strong)] hover:bg-[var(--overlay-strong)]"
                       >
                         {member.name}
                       </button>
@@ -283,18 +278,18 @@ export function ResearchPage() {
         {/* Mobile View: Simple vertical stack */}
         <div className="lg:hidden flex flex-col gap-8">
            {areas.map((area, i) => (
-             <div 
-               key={i}
-               className="rounded-2xl overflow-hidden border border-white/10"
-               style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)' }}
-             >
-                <ImageWithFallback src={area.meta.image} alt={area.meta.title} className="w-full h-56" />
-                <div className="p-6">
-                  <h2 className="text-xl font-bold text-white mb-4">
-                    {language === 'zh' ? area.meta.title_zh : area.meta.title}
-                  </h2>
-                  <div className="text-white/60 text-sm leading-relaxed mb-6 markdown-custom-wrapper">
-                    <div className="markdown-body p-0 bg-transparent text-white/60">
+              <div 
+                key={i}
+                className="theme-surface rounded-2xl overflow-hidden"
+                style={{ backdropFilter: 'blur(20px)' }}
+              >
+                 <ImageWithFallback src={area.meta.image} alt={area.meta.title} className="w-full h-56" />
+                 <div className="p-6">
+                  <h2 className="text-xl font-bold text-[color:var(--foreground)] mb-4">
+                     {language === 'zh' ? area.meta.title_zh : area.meta.title}
+                   </h2>
+                  <div className="theme-soft text-sm leading-relaxed mb-6 markdown-custom-wrapper">
+                    <div className="markdown-body p-0 bg-transparent theme-soft">
                       <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
                         {language === 'zh' ? area.description.zh : area.description.en}
                       </ReactMarkdown>
@@ -304,13 +299,13 @@ export function ResearchPage() {
                   <div className="mb-6">
                     <div className="flex items-center gap-2 mb-3">
                       <Tag className="h-4 w-4 text-[#CB743B]/80" />
-                      <span className="text-base font-semibold tracking-wider text-white/80">
+                      <span className="text-base font-semibold tracking-wider text-[color:var(--foreground-soft)]">
                         {language === 'zh' ? '关键词' : 'Keywords'}
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {area.keywords.map((kw, ki) => (
-                        <span key={ki} className="text-xs px-3 py-1.5 rounded-lg border border-white/20 bg-white/10 text-white/80 backdrop-blur-sm shadow-sm">
+                        <span key={ki} className="theme-pill text-xs px-3 py-1.5 rounded-lg backdrop-blur-sm shadow-sm">
                           {language === 'zh' ? kw.zh : kw.en}
                         </span>
                       ))}
@@ -321,7 +316,7 @@ export function ResearchPage() {
                   <div>
                     <div className="flex items-center gap-2 mb-3">
                       <Users className="h-4 w-4 text-[#CB743B]/80" />
-                      <span className="text-base font-semibold tracking-wider text-white/80">
+                      <span className="text-base font-semibold tracking-wider text-[color:var(--foreground-soft)]">
                         {language === 'zh' ? '相关实验室成员' : 'Related Lab Members'}
                       </span>
                     </div>
@@ -330,7 +325,7 @@ export function ResearchPage() {
                         <button 
                           key={mi} 
                           onClick={() => handleMemberClick(member.slug)}
-                          className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs text-white/60 active:bg-white/20 transition-colors"
+                          className="theme-pill px-3 py-1.5 rounded-lg text-xs active:bg-[var(--overlay-strong)] transition-colors"
                         >
                           {member.name}
                         </button>

@@ -14,13 +14,13 @@ export function TeamPage({ onMemberClick }: TeamPageProps) {
   };
 
   return (
-    <div className="min-h-screen pt-20" style={{ backgroundColor: '#1c1c1f' }}>
+    <div className="theme-page theme-page-gradient min-h-screen pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <BackButton onClick={() => navigateTo('home')} className="md:hidden" />
       </div>
       
       {/* Use existing TeamMembers component */}
-      <TeamMembers onMemberClick={handleMemberClick} sectionClassName="pt-4 pb-20 bg-slate-900" />
+      <TeamMembers onMemberClick={handleMemberClick} sectionClassName="theme-page pt-4 pb-20" />
     </div>
   );
 }

@@ -30,7 +30,7 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="theme-page min-h-screen">
       <Header />
       <main>
         {renderPage()}

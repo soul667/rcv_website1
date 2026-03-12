@@ -1,32 +1,24 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown-dark.min.css');
 @import "tailwindcss";
 @plugin "daisyui";
+@import "./styles/globals.css";
 
 @theme {
   --color-brand-orange: #CB743B;
 }
 
-/* Force DaisyUI to NOT hijack Tailwind's standard colors or background values */
-:root, [data-theme] {
-  background-color: #1c1c1f !important; /* Forces the deep dark gray color globally */
+[data-theme="light"] {
+  --b1: 210 40% 98%;
+  --b2: 214 32% 94%;
+  --b3: 214 32% 90%;
+  --bc: 222 47% 11%;
 }
 
-/* Extremely strict override to ensure standard slate-900 classes apply */
-.bg-slate-900, .bg-gray-900 {
-  background-color: #1c1c1f !important; 
-}
-
-/* DaisyUI theme background strict mapping */
 [data-theme="dark"] {
-  --b1: 240 5% 12%;      /* #1c1c1f represented in HSL */
+  --b1: 240 5% 12%;
   --b2: 240 5% 16%;
   --b3: 240 5% 20%;
   --bc: 210 40% 98%;
-}
-
-html, body {
-  background-color: #1c1c1f !important; 
-  color: white;
 }
 
 @keyframes float-breathe {
@@ -54,6 +46,7 @@ html, body {
 
 .markdown-body {
   background-color: transparent !important;
+  color: var(--foreground) !important;
 }
 
 /* Original markdown formatting overrides */
@@ -65,7 +58,7 @@ html, body {
 .markdown-custom-wrapper p {
   font-size: 1.125rem;
   line-height: 1.7777778;
-  color: rgba(209,213,219,0.9);
+  color: var(--foreground-soft);
   margin-bottom: 2rem;
   text-align: justify;
 }
@@ -74,7 +67,7 @@ html, body {
   padding-left: 2rem;
   margin-bottom: 2.5rem;
   font-size: 1.125rem;
-  color: rgba(209,213,219,0.9);
+  color: var(--foreground-soft);
 }
 .markdown-custom-wrapper ul li {
   margin-top: 0.5rem;
@@ -85,7 +78,7 @@ html, body {
   padding-left: 2rem;
   margin-bottom: 2.5rem;
   font-size: 1.125rem;
-  color: rgba(209,213,219,0.9);
+  color: var(--foreground-soft);
 }
 .markdown-custom-wrapper ol li {
   margin-top: 0.5rem;

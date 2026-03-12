@@ -103,22 +103,22 @@ function StatCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, delay, ease: [0.23, 1, 0.32, 1] }}
-      className="relative group overflow-hidden rounded-xl border border-white/10 p-4 transition-all duration-500 hover:border-white/20"
-      style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)' }}
+      className="theme-surface theme-surface-hover relative group overflow-hidden rounded-xl p-4 transition-all duration-500"
+      style={{ backdropFilter: 'blur(20px)' }}
     >
       <div className="absolute -right-2 -top-2 w-16 h-16 opacity-[0.05] group-hover:opacity-[0.1] transition-all duration-700 pointer-events-none group-hover:scale-125 group-hover:-rotate-12">
-        <Icon className="w-full h-full text-white" />
+        <Icon className="w-full h-full theme-muted" />
       </div>
       
       <div className="flex items-center gap-4 relative z-10">
-        <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white/[0.05] border border-white/[0.1] text-white/70 group-hover:text-white group-hover:scale-110 transition-all duration-500 flex-shrink-0">
+        <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-[var(--overlay)] border border-[color:var(--border)] text-[color:var(--foreground-soft)] group-hover:text-[color:var(--foreground)] group-hover:scale-110 transition-all duration-500 flex-shrink-0">
           <Icon className="w-4 h-4" />
         </div>
         <div>
-          <div className="text-2xl font-light tracking-tight text-white mb-0.5 leading-none">
+          <div className="text-2xl font-light tracking-tight text-[color:var(--foreground)] mb-0.5 leading-none">
             {value}
           </div>
-          <div className="text-[10px] uppercase tracking-widest text-white/40 font-medium group-hover:text-white/60 transition-colors duration-300 line-clamp-1">{label}</div>
+          <div className="text-[10px] uppercase tracking-widest theme-muted font-medium group-hover:text-[color:var(--foreground-soft)] transition-colors duration-300 line-clamp-1">{label}</div>
         </div>
       </div>
     </motion.div>
@@ -126,17 +126,17 @@ function StatCard({
 }
 function YearSection({ year }: { year: number }) {
   return (
-    <div className="sticky top-0 z-20 pt-8 pb-4 bg-gray-900">
+    <div className="sticky top-0 z-20 pt-8 pb-4 theme-page">
       <div className="flex items-center gap-6">
         <span
-          className="text-4xl text-white/90"
+          className="text-4xl text-[color:var(--foreground)]"
           style={{
             fontFamily: '"Noto Serif SC", "Georgia", serif',
             fontWeight: 200,
             letterSpacing: '0.05em',
           }}
         >{year}</span>
-        <div className="flex-1 h-px bg-gradient-to-r from-white/[0.15] to-transparent" />
+        <div className="flex-1 h-px theme-divider-glow" />
       </div>
     </div>
   );
@@ -181,13 +181,12 @@ function PublicationCard({ pub, index, t, authors }: {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.98 }}
       transition={{ duration: 0.5, delay: index * 0.05, ease: [0.23, 1, 0.32, 1] }}
-      className={`group relative rounded-2xl border transition-all duration-500 overflow-hidden
+      className={`theme-surface group relative rounded-2xl transition-all duration-500 overflow-hidden
         ${pub.highlighted
-          ? "border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
-          : "border-white/10"
+          ? "border-[color:var(--border-strong)] shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
+          : "border-[color:var(--border)]"
         }`}
       style={{
-        background: 'rgba(255,255,255,0.03)',
         backdropFilter: 'blur(20px)',
       }}
     >
@@ -203,37 +202,37 @@ function PublicationCard({ pub, index, t, authors }: {
             <span
               className={`text-[10px] uppercase tracking-widest px-3 py-1 rounded-full border ${
                 pub.type === "Journal"
-                  ? "bg-white/[0.08] text-white/90 border-white/20"
+                  ? "bg-[var(--overlay-strong)] text-[color:var(--foreground)] border-[color:var(--border-strong)]"
                   : pub.type === "Conference"
-                    ? "bg-white/[0.04] text-white/60 border-white/10"
-                    : "bg-transparent text-white/40 border-white/5"
+                    ? "bg-[var(--overlay)] text-[color:var(--foreground-soft)] border-[color:var(--border)]"
+                    : "bg-transparent theme-muted border-[color:var(--border)]"
               }`}
             >
               {pub.type === "Journal" ? t.journal : pub.type === "Conference" ? t.conference : t.preprint}
             </span>
             
             {pub.highlighted && (
-              <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest px-3 py-1 rounded-full bg-white/10 text-white border border-white/30 animate-pulse">
+              <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest px-3 py-1 rounded-full bg-[#CB743B] text-white border border-[#CB743B] animate-pulse">
                 <Award className="w-3 h-3" />
                 {t.featured}
               </span>
             )}
           </div>
-          <span className="text-xs font-mono text-white/20 group-hover:text-white/40 transition-colors">#{pub.id.slice(0, 15)}</span>
+          <span className="text-xs font-mono theme-muted group-hover:text-[color:var(--foreground-muted)] transition-colors">#{pub.id.slice(0, 15)}</span>
         </div>
 
-        <h3 className="text-xl font-light text-white mb-4 leading-snug group-hover:text-white transition-colors duration-300">
+        <h3 className="text-xl font-light text-[color:var(--foreground)] mb-4 leading-snug group-hover:text-[color:var(--foreground)] transition-colors duration-300">
           {pub.title}
         </h3>
 
         <div className="flex items-start gap-2 mb-4">
-          <div className="text-[14px] text-white/50 leading-relaxed font-light">
+          <div className="text-[14px] theme-muted leading-relaxed font-light">
             {pub.authors.map((author, i) => (
               <span key={i}>
                 {i > 0 && ", "}
                 <span 
                   onClick={(e) => handleAuthorClick(author, e)}
-                  className={`transition-colors duration-300 ${author.includes("Tang Chao") || author.includes("Chao Tang") || author.includes("Yichen Wang") ? "text-white/80 font-medium cursor-pointer hover:text-white hover:underline underline-offset-4" : "hover:text-white/70 cursor-pointer"}` }
+                  className={`transition-colors duration-300 ${author.includes("Tang Chao") || author.includes("Chao Tang") || author.includes("Yichen Wang") ? "text-[color:var(--foreground-soft)] font-medium cursor-pointer hover:text-[color:var(--foreground)] hover:underline underline-offset-4" : "hover:text-[color:var(--foreground-soft)] cursor-pointer"}` }
                 >
                   {author}
                 </span>
@@ -242,7 +241,7 @@ function PublicationCard({ pub, index, t, authors }: {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-[14px] text-white/70 mb-6 italic opacity-80 group-hover:opacity-100 transition-opacity">
+        <div className="flex items-center gap-2 text-[14px] text-[color:var(--foreground-soft)] mb-6 italic opacity-80 group-hover:opacity-100 transition-opacity">
           <span>{pub.venue}</span>
         </div>
 
@@ -251,7 +250,7 @@ function PublicationCard({ pub, index, t, authors }: {
             {pub.keywords.map((kw) => (
               <span
                 key={kw}
-                className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-white/[0.03] text-white/30 border border-white/[0.05] group-hover:border-white/10 group-hover:text-white/50 transition-all"
+                className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-[var(--overlay)] theme-muted border border-[color:var(--border)] group-hover:border-[color:var(--border-strong)] group-hover:text-[color:var(--foreground-muted)] transition-all"
               >
                 {kw}
               </span>
@@ -266,9 +265,9 @@ function PublicationCard({ pub, index, t, authors }: {
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
-              className="overflow-hidden border-t border-white/5 mt-4 pt-6"
+              className="overflow-hidden border-t border-[color:var(--border)] mt-4 pt-6"
             >
-              <p className="text-[14px] text-white/40 leading-relaxed font-light italic mb-6">
+              <p className="text-[14px] theme-muted leading-relaxed font-light italic mb-6">
                 {pub.abstract}
               </p>
             </motion.div>
@@ -276,12 +275,12 @@ function PublicationCard({ pub, index, t, authors }: {
         </AnimatePresence>
 
         {(pub.url || pub.doi || pub.abstract) && (
-          <div className="flex items-center justify-between mt-auto pt-6 border-t border-white/5">
+          <div className="flex items-center justify-between mt-auto pt-6 border-t border-[color:var(--border)]">
             <div className="flex items-center gap-6">
               {pub.url && (
                 <a
                   href={pub.url}
-                  className="inline-flex items-center gap-2 text-[11px] uppercase tracking-widest font-semibold text-white/50 hover:text-white transition-all group/link"
+                  className="inline-flex items-center gap-2 text-[11px] uppercase tracking-widest font-semibold theme-muted hover:text-[color:var(--foreground)] transition-all group/link"
                 >
                   <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
                   {t.paper}
@@ -290,7 +289,7 @@ function PublicationCard({ pub, index, t, authors }: {
               {pub.doi && (
                 <a
                   href={`https://doi.org/${pub.doi.replace('https://doi.org/','')}`}
-                  className="inline-flex items-center gap-2 text-[11px] uppercase tracking-widest font-semibold text-white/50 hover:text-white transition-all group/link"
+                  className="inline-flex items-center gap-2 text-[11px] uppercase tracking-widest font-semibold theme-muted hover:text-[color:var(--foreground)] transition-all group/link"
                 >
                   <Globe className="w-3.5 h-3.5 opacity-50 group-hover/link:rotate-12 transition-transform" />
                   {t.doi}
@@ -301,7 +300,7 @@ function PublicationCard({ pub, index, t, authors }: {
             {pub.abstract && (
               <button
                 onClick={() => setExpanded(!expanded)}
-                className="p-2 rounded-full bg-white/[0.03] hover:bg-white/[0.08] border border-white/5 transition-all text-white/40 hover:text-white"
+                className="p-2 rounded-full bg-[var(--overlay)] hover:bg-[var(--overlay-strong)] border border-[color:var(--border)] transition-all theme-muted hover:text-[color:var(--foreground)]"
               >
                 <ChevronDown className={`w-4 h-4 transition-transform duration-500 ${expanded ? "rotate-180" : ""}`} />
               </button>
@@ -386,7 +385,7 @@ export function PublicationsPage() {
   }, [filteredPubs]);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white selection:bg-white/20 pt-20">
+    <div className="theme-page theme-page-gradient min-h-screen selection:bg-[var(--overlay-strong)] pt-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <BackButton onClick={() => navigateTo('home')} className="md:hidden" />
       </div>
@@ -401,7 +400,7 @@ export function PublicationsPage() {
           >
             <div className="inline-block mb-4">
               <span 
-                className="text-[10px] sm:text-xs tracking-[0.2em] text-white/60 uppercase font-light border border-white/10 px-3.5 py-1 rounded-full backdrop-blur-sm bg-white/5"
+                className="theme-pill text-[10px] sm:text-xs tracking-[0.2em] uppercase font-light px-3.5 py-1 rounded-full backdrop-blur-sm"
                 style={{
                   fontFamily: langKey === 'zh'
                     ? '"Microsoft YaHei", "微软雅黑", sans-serif'
@@ -414,7 +413,7 @@ export function PublicationsPage() {
             </div>
             
             <h1 
-              className="text-4xl md:text-6xl font-extralight tracking-wide text-white leading-tight block mb-4"
+              className="text-4xl md:text-6xl font-extralight tracking-wide text-[color:var(--foreground)] leading-tight block mb-4"
               style={{
                 fontWeight: 200,
                 letterSpacing: langKey === 'zh' ? '0.08em' : '0.04em',
@@ -433,8 +432,8 @@ export function PublicationsPage() {
       <main className="max-w-6xl mx-auto px-8 pb-40 relative z-10">
         {loading ? (
           <div className="py-20 flex flex-col items-center justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white/50 mx-auto mb-4"></div>
-            <p className="text-white/40">Loading academic outputs...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[color:var(--border-strong)] mx-auto mb-4"></div>
+            <p className="theme-soft">Loading academic outputs...</p>
           </div>
         ) : (
           <>
@@ -452,25 +451,25 @@ export function PublicationsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.5 }}
-                className="border border-white/10 rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.3)] overflow-hidden"
-                style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)' }}
+                className="theme-surface rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.18)] overflow-hidden"
+                style={{ backdropFilter: 'blur(20px)' }}
               >
                 {/* Desktop: single row | Mobile: search on top, filters below */}
                 <div className="flex flex-col md:flex-row md:items-center">
                   {/* Search */}
                   <div className="relative flex-1 group">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-white/60 transition-colors" />
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 theme-muted group-focus-within:text-[color:var(--foreground-soft)] transition-colors" />
                     <input
                       type="text"
                       placeholder={t.searchPlaceholder}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full h-12 pl-12 pr-12 bg-transparent text-[14px] text-white placeholder:text-white/20 focus:outline-none rounded-t-2xl md:rounded-none md:rounded-l-2xl transition-all"
+                      className="w-full h-12 pl-12 pr-12 bg-transparent text-[14px] text-[color:var(--foreground)] placeholder:text-[color:var(--muted-foreground)] focus:outline-none rounded-t-2xl md:rounded-none md:rounded-l-2xl transition-all"
                     />
                     {searchQuery && (
                       <button
                         onClick={() => setSearchQuery("")}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center text-white/20 hover:text-white transition-colors"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center theme-muted hover:text-[color:var(--foreground)] transition-colors"
                       >
                         <X className="w-3 h-3" />
                       </button>
@@ -478,8 +477,8 @@ export function PublicationsPage() {
                   </div>
 
                   {/* Divider */}
-                  <div className="hidden md:block w-px bg-white/5 self-stretch" />
-                  <div className="md:hidden h-px bg-white/5 mx-3" />
+                  <div className="hidden md:block w-px bg-[color:var(--border)] self-stretch" />
+                  <div className="md:hidden h-px bg-[color:var(--border)] mx-3" />
 
                   {/* Filters row: type buttons + year select side by side */}
                   <div className="flex items-center gap-1 px-2 py-1.5 md:py-0">
@@ -490,8 +489,8 @@ export function PublicationsPage() {
                           onClick={() => setActiveFilter(type as typeof activeFilter)}
                           className={`px-3 md:px-4 py-1.5 rounded-lg text-[11px] font-semibold tracking-wider transition-all duration-500 whitespace-nowrap ${
                             activeFilter === type
-                              ? "bg-white text-gray-900 shadow-lg"
-                              : "text-white/40 hover:text-white/80 hover:bg-white/5"
+                              ? "bg-[color:var(--foreground)] text-[color:var(--background)] shadow-lg"
+                              : "theme-muted hover:text-[color:var(--foreground-soft)] hover:bg-[var(--overlay)]"
                           }`}
                         >
                           {type === "All" ? t.all : type === "Journal" ? t.journal : type === "Conference" ? t.conference : t.preprint}
@@ -504,14 +503,14 @@ export function PublicationsPage() {
                       <select
                         value={yearFilter === null ? "" : yearFilter.toString()}
                         onChange={(e) => setYearFilter(e.target.value === "" ? null : parseInt(e.target.value))}
-                        className="appearance-none h-9 pl-3 pr-8 bg-transparent text-[12px] font-semibold text-white/50 hover:text-white focus:outline-none rounded-lg cursor-pointer transition-all"
+                        className="appearance-none h-9 pl-3 pr-8 bg-transparent text-[12px] font-semibold theme-muted hover:text-[color:var(--foreground)] focus:outline-none rounded-lg cursor-pointer transition-all"
                       >
-                        <option value="" className="bg-gray-900">{t.allYears}</option>
+                        <option value="" className="bg-[var(--background-elevated)] text-[color:var(--foreground)]">{t.allYears}</option>
                         {years.map((y: number) => (
-                          <option key={y} value={y} className="bg-gray-900">{y}</option>
+                          <option key={y} value={y} className="bg-[var(--background-elevated)] text-[color:var(--foreground)]">{y}</option>
                         ))}
                       </select>
-                      <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/30 pointer-events-none" />
+                      <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 theme-muted pointer-events-none" />
                     </div>
                   </div>
                 </div>
@@ -524,13 +523,13 @@ export function PublicationsPage() {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="flex flex-col items-center justify-center py-40 text-center border border-white/[0.03] rounded-3xl bg-white/[0.01]"
+                  className="theme-surface flex flex-col items-center justify-center py-40 text-center rounded-3xl"
                 >
-                  <div className="w-20 h-20 rounded-full bg-white/[0.02] flex items-center justify-center mb-8 border border-white/5">
-                    <Search className="w-8 h-8 text-white/10" />
+                  <div className="w-20 h-20 rounded-full bg-[var(--overlay)] flex items-center justify-center mb-8 border border-[color:var(--border)]">
+                    <Search className="w-8 h-8 theme-muted" />
                   </div>
-                  <h3 className="text-2xl font-light text-white/80 mb-4">{t.noPubs}</h3>
-                  <p className="text-white/30 text-sm mb-10 max-w-xs leading-relaxed">
+                  <h3 className="text-2xl font-light text-[color:var(--foreground-soft)] mb-4">{t.noPubs}</h3>
+                  <p className="theme-muted text-sm mb-10 max-w-xs leading-relaxed">
                     {t.tryAdjusting}
                   </p>
                   <button
@@ -539,7 +538,7 @@ export function PublicationsPage() {
                       setActiveFilter("All");
                       setYearFilter(null);
                     }}
-                    className="px-10 py-3 bg-white text-gray-900 text-[11px] font-bold uppercase tracking-[0.2em] rounded-full transition-all hover:scale-105 active:scale-95 shadow-xl"
+                    className="px-10 py-3 bg-[color:var(--foreground)] text-[color:var(--background)] text-[11px] font-bold uppercase tracking-[0.2em] rounded-full transition-all hover:scale-105 active:scale-95 shadow-xl"
                   >
                     {t.reset}
                   </button>

@@ -1,21 +1,59 @@
 :root {
   --font-size: 16px;
-  --background: #111827;
-  --foreground: #f9fafb;
-  --card: #1f2937;
-  --card-foreground: #f9fafb;
+  --background: #f4f7fb;
+  --background-elevated: #ffffff;
+  --foreground: #0f172a;
+  --foreground-soft: rgba(15, 23, 42, 0.78);
+  --foreground-muted: #475569;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
   --primary: #3b82f6;
   --primary-foreground: #ffffff;
+  --secondary: #e2e8f0;
+  --secondary-foreground: #0f172a;
+  --muted: #e2e8f0;
+  --muted-foreground: #64748b;
+  --accent: #e2e8f0;
+  --accent-foreground: #0f172a;
+  --border: rgba(148, 163, 184, 0.35);
+  --border-strong: rgba(100, 116, 139, 0.45);
+  --input: rgba(226, 232, 240, 0.9);
+  --ring: #3b82f6;
+  --panel: rgba(255, 255, 255, 0.78);
+  --panel-strong: rgba(255, 255, 255, 0.92);
+  --panel-hover: rgba(255, 255, 255, 0.96);
+  --overlay: rgba(15, 23, 42, 0.06);
+  --overlay-strong: rgba(15, 23, 42, 0.12);
+  --header-background: rgba(255, 255, 255, 0.72);
+  --hero-overlay-start: rgba(2, 6, 23, 0.38);
+  --hero-overlay-mid: rgba(2, 6, 23, 0.52);
+  --hero-overlay-end: rgba(2, 6, 23, 0.72);
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: #111827;
+  --background-elevated: #1c1c1f;
+  --foreground: #f9fafb;
+  --foreground-soft: rgba(209, 213, 219, 0.9);
+  --foreground-muted: #9ca3af;
+  --card: #1f2937;
+  --card-foreground: #f9fafb;
   --secondary: #374151;
   --secondary-foreground: #f9fafb;
   --muted: #374151;
   --muted-foreground: #9ca3af;
   --accent: #1f2937;
   --accent-foreground: #f9fafb;
-  --border: #374151;
-  --input: #374151;
-  --ring: #3b82f6;
-  --radius: 0.5rem;
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.2);
+  --input: rgba(55, 65, 81, 0.9);
+  --panel: rgba(17, 24, 39, 0.78);
+  --panel-strong: rgba(31, 41, 55, 0.92);
+  --panel-hover: rgba(31, 41, 55, 0.98);
+  --overlay: rgba(255, 255, 255, 0.06);
+  --overlay-strong: rgba(255, 255, 255, 0.12);
+  --header-background: rgba(10, 15, 24, 0.72);
 }
 
 @theme inline {
@@ -46,7 +84,9 @@
   }
 
   body {
-    @apply bg-gray-900 text-white transition-colors duration-200;
+    background-color: var(--background);
+    color: var(--foreground);
+    transition: background-color 0.2s ease, color 0.2s ease;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 
@@ -78,15 +118,16 @@
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-gray-800;
+    background-color: var(--panel);
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-600 rounded-full;
+    background-color: var(--muted-foreground);
+    border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-500;
+    background-color: var(--foreground-muted);
   }
 }
 
@@ -122,7 +163,7 @@
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.6;
-    color: #d1d5db;
+    color: var(--foreground-soft);
   }
 
   label {
@@ -147,6 +188,127 @@
 html {
   font-size: var(--font-size);
   scroll-behavior: smooth;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.theme-page {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.theme-page-gradient {
+  background:
+    radial-gradient(circle at top right, color-mix(in srgb, var(--primary) 18%, transparent) 0%, transparent 28%),
+    linear-gradient(180deg, var(--background-elevated) 0%, var(--background) 100%);
+}
+
+.theme-surface {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+}
+
+.dark .theme-surface {
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+}
+
+.theme-surface-strong {
+  background: var(--panel-strong);
+  border: 1px solid var(--border);
+}
+
+.theme-surface-hover:hover {
+  background: var(--panel-hover);
+  border-color: var(--border-strong);
+}
+
+.theme-header {
+  background: var(--header-background);
+  border-color: var(--border);
+}
+
+.theme-muted {
+  color: var(--foreground-muted);
+}
+
+.theme-soft {
+  color: var(--foreground-soft);
+}
+
+.theme-pill {
+  background: var(--overlay);
+  border: 1px solid var(--border);
+  color: var(--foreground-soft);
+}
+
+.theme-icon-button {
+  background: var(--overlay);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+}
+
+.theme-icon-button:hover {
+  background: var(--overlay-strong);
+  border-color: var(--border-strong);
+}
+
+.theme-divider {
+  border-color: var(--border);
+}
+
+.theme-divider-glow {
+  background: linear-gradient(to right, transparent, var(--border-strong), transparent);
+}
+
+.theme-bottom-fade {
+  background: linear-gradient(to top, var(--overlay-strong), transparent);
+}
+
+.hero-overlay {
+  background: linear-gradient(
+    to bottom,
+    var(--hero-overlay-start),
+    var(--hero-overlay-mid),
+    var(--hero-overlay-end)
+  );
+}
+
+.markdown-body,
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  color: var(--foreground) !important;
+}
+
+.markdown-body p,
+.markdown-body li,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body blockquote {
+  color: var(--foreground-soft) !important;
+}
+
+.markdown-body strong {
+  color: var(--foreground) !important;
+}
+
+.markdown-body blockquote {
+  border-left-color: var(--border) !important;
+}
+
+.markdown-body hr,
+.markdown-body table tr,
+.markdown-body table th,
+.markdown-body table td {
+  border-color: var(--border) !important;
 }
 
 /* Gradient backgrounds */

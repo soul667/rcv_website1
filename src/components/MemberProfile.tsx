@@ -54,7 +54,7 @@ type SocialLink = {
 const YouTubeEmbed = ({ videoId, title }: YouTubeEmbedProps) => (
   <div className="my-8 w-full flex justify-center">
     <div 
-      className="bg-slate-800 rounded-lg overflow-hidden shadow-lg"
+      className="theme-surface rounded-lg overflow-hidden shadow-lg"
       style={{ 
         width: '100%', 
         maxWidth: '1280px', 
@@ -234,7 +234,7 @@ export function MemberProfile({ member, onBack, previousPage }: MemberProfilePro
   const hasEmailInSocial = socialLinks.some((item) => item.icon.toLowerCase() === 'envelope');
 
   return (
-    <div className="min-h-screen bg-slate-900 py-20">
+    <div className="theme-page theme-page-gradient min-h-screen py-20">
       <div
         className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"
         style={{ paddingLeft: 'max(1rem, 2em)', paddingRight: 'max(1rem, 2em)' }}
@@ -245,11 +245,11 @@ export function MemberProfile({ member, onBack, previousPage }: MemberProfilePro
         {/* Header - Resume Style */}
         <div className="flex flex-col-reverse sm:flex-row justify-between gap-6 mb-12 sm:items-start items-center">
           {/* Profile Details (Left) */}
-          <div className="flex-1 text-center sm:text-left text-white pt-1 sm:pt-2">
+          <div className="flex-1 text-center sm:text-left text-[color:var(--foreground)] pt-1 sm:pt-2">
             <h1 className="text-3xl lg:text-4xl font-semibold tracking-tight mb-2">
               {language === 'zh' ? member.name : member.nameEn}
             </h1>
-            <p className="text-lg text-gray-300 mb-6 font-normal">
+            <p className="text-lg theme-soft mb-6 font-normal">
               {language === 'zh' ? member.title : member.titleEn}
             </p>
             
@@ -257,9 +257,9 @@ export function MemberProfile({ member, onBack, previousPage }: MemberProfilePro
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-6 gap-y-3">
                {member.email && !hasEmailInSocial && (
                  <a
-                   href={`mailto:${member.email}`}
-                   className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors text-sm sm:text-base"
-                 >
+                    href={`mailto:${member.email}`}
+                    className="flex items-center gap-2 theme-soft hover:text-[color:var(--foreground)] transition-colors text-sm sm:text-base"
+                  >
                    <Mail className="h-4 w-4" />
                    <span>{member.email}</span>
                  </a>
@@ -271,10 +271,10 @@ export function MemberProfile({ member, onBack, previousPage }: MemberProfilePro
                   <a
                     key={`${item.icon}-${index}`}
                     href={item.link}
-                    target={isMail ? undefined : '_blank'}
-                    rel={isMail ? undefined : 'noopener noreferrer'}
-                    className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors text-sm sm:text-base"
-                  >
+                     target={isMail ? undefined : '_blank'}
+                     rel={isMail ? undefined : 'noopener noreferrer'}
+                     className="flex items-center gap-2 theme-soft hover:text-[color:var(--foreground)] transition-colors text-sm sm:text-base"
+                   >
                     <IconComponent className="h-4 w-4" />
                     <span>{getSocialLabel(item.icon, item.link)}</span>
                   </a>
@@ -288,19 +288,19 @@ export function MemberProfile({ member, onBack, previousPage }: MemberProfilePro
             <ImageWithFallback
               src={member.image}
               alt={member.name}
-              className="w-28 h-28 sm:w-32 sm:h-32 lg:w-36 lg:h-36 rounded-lg object-cover shadow-md border border-slate-700/50"
+              className="w-28 h-28 sm:w-32 sm:h-32 lg:w-36 lg:h-36 rounded-lg object-cover shadow-md border border-[color:var(--border)]"
               loading="lazy"
             />
           </div>
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-gradient-to-r from-slate-800 via-slate-600 to-slate-800 my-10 w-full" />
+        <div className="h-px theme-divider-glow my-10 w-full" />
 
         {/* Content - aligned with header */}
         <div className="overflow-x-hidden">
           <div className="markdown-custom-wrapper w-full">
-            <div className="markdown-body p-0 bg-transparent text-gray-300 max-w-none">
+            <div className="markdown-body p-0 bg-transparent theme-soft max-w-none">
                 <ReactMarkdown 
                   remarkPlugins={[remarkGfm]}
                   rehypePlugins={[rehypeRaw]}

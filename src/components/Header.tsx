@@ -1,13 +1,14 @@
-import { Menu, Globe } from 'lucide-react';
+import { Menu, Globe, Moon, Sun } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useLanguage } from './LanguageContext';
 import { useRouter } from './Router';
-import { Button } from './ui/button';
+import { useTheme } from './ThemeContext';
 
 export function Header() {
   const [showDesktopTitle, setShowDesktopTitle] = useState(() => window.innerWidth >= 1100);
   const { language, toggleLanguage, t } = useLanguage();
   const { navigateTo, currentPage } = useRouter();
+  const { theme, toggleTheme } = useTheme();
   const drawerId = 'mobile-nav-drawer';
 
   useEffect(() => {
@@ -35,6 +36,9 @@ export function Header() {
     closeDrawer();
   };
 
+  const ThemeIcon = theme === 'dark' ? Sun : Moon;
+  const themeLabel = theme === 'dark' ? '切换到浅色模式' : '切换到暗黑模式';
+
   return (
     <>
       {/* DaisyUI Drawer wrapper — only active on mobile */}
@@ -43,7 +47,7 @@ export function Header() {
 
         {/* Header bar */}
         <div className="drawer-content">
-          <header className="fixed top-0 w-full z-50 bg-black/40 backdrop-blur-xl border-b border-white/10">
+          <header className="theme-header fixed top-0 w-full z-50 border-b backdrop-blur-xl">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex justify-between items-center h-16">
                 {/* Logo (mobile: just icon) */}
@@ -58,9 +62,19 @@ export function Header() {
                 </button>
 
                 {/* Mobile Hamburger */}
-                <label htmlFor={drawerId} className="btn btn-ghost btn-circle text-white hover:bg-white/10">
-                  <Menu className="h-6 w-6" />
-                </label>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={toggleTheme}
+                    aria-label={themeLabel}
+                    className="theme-icon-button inline-flex h-10 w-10 items-center justify-center rounded-full transition-all duration-300"
+                  >
+                    <ThemeIcon className="h-4 w-4" />
+                  </button>
+                  <label htmlFor={drawerId} className="theme-icon-button inline-flex h-10 w-10 items-center justify-center rounded-full transition-all duration-300">
+                    <Menu className="h-6 w-6" />
+                  </label>
+                </div>
               </div>
             </div>
           </header>
@@ -68,11 +82,11 @@ export function Header() {
 
         {/* Drawer Side Panel */}
         <div className="drawer-side z-[100]">
-          <label htmlFor={drawerId} aria-label="close sidebar" className="drawer-overlay backdrop-blur-sm bg-black/60" />
-          <div className="menu min-h-full w-72 bg-black/20 backdrop-blur-md border-l border-white/10 text-white p-6 flex flex-col gap-1" style={{ boxShadow: '-8px 0 32px rgba(0,0,0,0.5)' }}>
+          <label htmlFor={drawerId} aria-label="close sidebar" className="drawer-overlay backdrop-blur-sm bg-black/40 dark:bg-black/60" />
+          <div className="theme-surface menu min-h-full w-72 border-l p-6 flex flex-col gap-1" style={{ boxShadow: theme === 'dark' ? '-8px 0 32px rgba(0,0,0,0.5)' : '-8px 0 32px rgba(15,23,42,0.12)' }}>
             {/* Close hint / branding */}
-            <div className="mb-4 pb-4 border-b border-white/10">
-              <p className="text-xs text-white/40 tracking-widest uppercase">Navigation</p>
+            <div className="mb-4 pb-4 border-b theme-divider">
+              <p className="theme-muted text-xs tracking-widest uppercase">Navigation</p>
             </div>
 
             {/* Nav Items */}
@@ -82,8 +96,8 @@ export function Header() {
                 onClick={() => handleNavClick(item.page)}
                 className={`text-left px-4 py-3 rounded-lg transition-all duration-200 text-base ${
                   currentPage === item.page
-                    ? 'text-white bg-white/10 font-medium border-l-2 border-[#CB743B] pl-3'
-                    : 'text-white/60 hover:text-white hover:bg-white/5 font-normal'
+                    ? 'font-medium border-l-2 border-[#CB743B] pl-3 theme-surface-strong'
+                    : 'theme-muted hover:text-[color:var(--foreground)] hover:bg-[var(--overlay)] font-normal'
                 }`}
               >
                 {item.label}
@@ -91,10 +105,17 @@ export function Header() {
             ))}
 
             {/* Language Toggle */}
-            <div className="mt-auto pt-4 border-t border-white/10">
+            <div className="mt-auto pt-4 border-t theme-divider space-y-3">
+              <button
+                onClick={() => { toggleTheme(); closeDrawer(); }}
+                className="theme-icon-button flex items-center gap-3 w-full px-4 py-3 rounded-lg transition-all duration-200 text-sm"
+              >
+                <ThemeIcon className="h-4 w-4" />
+                <span>{theme === 'dark' ? '浅色模式' : '暗黑模式'}</span>
+              </button>
               <button
                 onClick={() => { toggleLanguage(); closeDrawer(); }}
-                className="flex items-center gap-3 w-full px-4 py-3 rounded-lg bg-white/8 text-white/70 hover:bg-white/15 hover:text-white transition-all duration-200 border border-white/10 text-sm"
+                className="theme-icon-button flex items-center gap-3 w-full px-4 py-3 rounded-lg transition-all duration-200 text-sm"
               >
                 <Globe className="h-4 w-4" />
                 <span>{language === 'en' ? '中文' : 'EN'}</span>
@@ -105,7 +126,7 @@ export function Header() {
       </div>
 
       {/* Desktop Header (hidden on mobile) */}
-      <header className="hidden md:block fixed top-0 w-full z-50 bg-black/40 backdrop-blur-xl border-b border-white/10">
+      <header className="theme-header hidden md:block fixed top-0 w-full z-50 border-b backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
@@ -114,7 +135,7 @@ export function Header() {
                 <img src="/assets/media/logo.png" alt="EE Logo" className="h-12 w-12 object-contain transition-transform duration-300 group-hover:scale-110 filter brightness-110" />
                 <img src="/assets/media/ee-logo.png" alt="EE Logo" className="h-12 w-12 object-contain transition-transform duration-300 group-hover:scale-110 filter brightness-110" onError={(e) => { e.currentTarget.src = "/assets/media/logo.png"; }} />
                 {showDesktopTitle && (
-                  <div className="text-white font-semibold text-lg">
+                  <div className="text-[color:var(--foreground)] font-semibold text-lg">
                     {language === 'zh' ? '机器人与计算机视觉实验室' : 'Robotics and Computer Vision Lab'}
                   </div>
                 )}
@@ -130,18 +151,26 @@ export function Header() {
                     onClick={() => navigateTo(item.page)}
                     className={`relative px-5 py-2 transition-all duration-300 text-sm font-medium rounded-full tracking-wide ${
                       currentPage === item.page
-                        ? 'text-white bg-white/15 backdrop-blur-md border border-white/20 shadow-[0_8px_32px_rgba(255,255,255,0.05)]'
-                        : 'text-white/70 hover:text-white hover:bg-white/10 border border-transparent'
+                        ? 'text-[color:var(--foreground)] bg-[var(--overlay-strong)] backdrop-blur-md border border-[color:var(--border-strong)] shadow-[0_8px_32px_rgba(15,23,42,0.08)]'
+                        : 'theme-muted hover:text-[color:var(--foreground)] hover:bg-[var(--overlay)] border border-transparent'
                     }`}
                   >
                     {item.label}
                   </button>
                 ))}
 
-                <div className="ml-4 pl-4 border-l border-white/20 flex items-center">
+                <div className="ml-4 pl-4 border-l theme-divider flex items-center gap-2">
+                  <button
+                    onClick={toggleTheme}
+                    aria-label={themeLabel}
+                    className="theme-icon-button flex items-center px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full tracking-wide"
+                  >
+                    <ThemeIcon className="h-4 w-4 mr-2 opacity-90" />
+                    <span>{theme === 'dark' ? '浅色' : '暗黑'}</span>
+                  </button>
                   <button
                     onClick={toggleLanguage}
-                    className="flex items-center px-4 py-2 text-sm font-medium text-white transition-all duration-300 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 hover:border-white/30 shadow-[0_8px_32px_rgba(255,255,255,0.05)] tracking-wide"
+                    className="theme-icon-button flex items-center px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full tracking-wide"
                   >
                     <Globe className="h-4 w-4 mr-2 opacity-90" />
                     <span>{language === 'en' ? '中 文' : 'EN'}</span>
@@ -155,5 +184,4 @@ export function Header() {
     </>
   );
 }
-
 
