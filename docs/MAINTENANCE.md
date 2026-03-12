@@ -74,6 +74,9 @@ Each `_index.md` frontmatter should include `title`, `role`, and `user_groups` (
   - `npm run research:add -- ./your.json` – scaffold/update a research area TOML (and optionally copy an image)
 - Hero helper:
   - `npm run hero:slides` – print a slides array based on files in `public/assets/media/home_slides/` to paste into `src/utils/config.ts`
+- Optimization:
+  - `npm run images:compress` – Automatically detect and safely downsample huge imagery (>500KB) across the entire public directory.
+  - `npm run images:convert-gifs` – Automatically detect and convert large GIFs (>2MB) to highly compressed MP4 video loops to save massive bandwidth.
 - Validation: `npm run test:members`, `npm run test:publications`, or `npm run test:content`
 - Test member dataset: `scripts/test-members-data.json`
 

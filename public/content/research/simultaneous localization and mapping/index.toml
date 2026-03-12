@@ -3,7 +3,7 @@
 title = "Simultaneous Localization And Mapping (SLAM)"
 title_zh = "同步定位与建图 (SLAM)"
 weight = 1
-image = "/content/research/simultaneous localization and mapping/featured.gif"
+image = "/content/research/simultaneous localization and mapping/featured.mp4"
 color = "#4F8EF7"
 
 [description]

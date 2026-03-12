@@ -53,59 +53,73 @@ async function getPublicationFolders(): Promise<string[]> {
   return FALLBACK_PUBLICATIONS;
 }
 
+let publicationsCache: YamlPublication[] | null = null;
+let loadPublicationsPromise: Promise<YamlPublication[]> | null = null;
+
 export async function loadAllYamlPublications(): Promise<YamlPublication[]> {
-  try {
-    const publicationFolders = await getPublicationFolders();
-    const pubPromises = publicationFolders.map(async (folder) => {
-      try {
-        // Fetch YAML file
-        const res = await fetch(getContentUrl(`publication/${folder}/index.yaml`));
-        if (!res.ok) return null;
-        
-        const yamlText = await res.text();
-        const data = parse(yamlText);
-        
-        if (!data) return null;
+  if (publicationsCache) return publicationsCache;
+  if (loadPublicationsPromise) return loadPublicationsPromise;
 
-        // Determine publication type robustly based on existing numbers/strings
-        // Mapping from older publication_types -> 1: Conference, 2: Journal, 3: Preprint/Other
-        let pubType: 'Journal' | 'Conference' | 'Preprint' = 'Conference';
-        if (data.publication_types && data.publication_types.includes('2')) {
-          pubType = 'Journal';
-        } else if (data.publication_types && data.publication_types.includes('3')) {
-          pubType = 'Preprint';
+  loadPublicationsPromise = (async () => {
+    try {
+      const publicationFolders = await getPublicationFolders();
+      const pubPromises = publicationFolders.map(async (folder) => {
+        try {
+          // Fetch YAML file
+          const res = await fetch(getContentUrl(`publication/${folder}/index.yaml`));
+          if (!res.ok) return null;
+          
+          const yamlText = await res.text();
+          const data = parse(yamlText);
+          
+          if (!data) return null;
+
+          // Determine publication type robustly based on existing numbers/strings
+          // Mapping from older publication_types -> 1: Conference, 2: Journal, 3: Preprint/Other
+          let pubType: 'Journal' | 'Conference' | 'Preprint' = 'Conference';
+          if (data.publication_types && data.publication_types.includes('2')) {
+            pubType = 'Journal';
+          } else if (data.publication_types && data.publication_types.includes('3')) {
+            pubType = 'Preprint';
+          }
+
+          // Map yaml frontmatter structure to our interface
+          const pub: YamlPublication = {
+            id: folder,
+            title: data.title || '',
+            authors: data.authors || [],
+            venue: data.publication?.replace(/[*]/g, '') || '', // Remove markdown italics *
+            year: data.date ? new Date(data.date).getFullYear() : (new Date().getFullYear()),
+            type: pubType,
+            abstract: data.abstract || data.summary || data.description || undefined,
+            doi: data.doi || undefined,
+            // Support multiple typical Hugo/Academic formats
+            url: data.url_pdf || data.url_project || data.url_code || data.url_dataset || data.links?.[0]?.url || undefined,
+            keywords: data.tags || undefined,
+            highlighted: data.featured || false,
+          };
+
+          return pub;
+        } catch (err) {
+          console.error(`Failed loading publication from ${folder}:`, err);
+          return null; // Resolve to null so Promise.all doesn't completely fail
         }
+      });
 
-        // Map yaml frontmatter structure to our interface
-        const pub: YamlPublication = {
-          id: folder,
-          title: data.title || '',
-          authors: data.authors || [],
-          venue: data.publication?.replace(/[*]/g, '') || '', // Remove markdown italics *
-          year: data.date ? new Date(data.date).getFullYear() : (new Date().getFullYear()),
-          type: pubType,
-          abstract: data.abstract || data.summary || data.description || undefined,
-          doi: data.doi || undefined,
-          // Support multiple typical Hugo/Academic formats
-          url: data.url_pdf || data.url_project || data.url_code || data.url_dataset || data.links?.[0]?.url || undefined,
-          keywords: data.tags || undefined,
-          highlighted: data.featured || false,
-        };
+      const results = await Promise.all(pubPromises);
+      const validPublications = results.filter((p): p is YamlPublication => p !== null);
 
-        return pub;
-      } catch (err) {
-        console.error(`Failed loading publication from ${folder}:`, err);
-        return null; // Resolve to null so Promise.all doesn't completely fail
-      }
-    });
-
-    const results = await Promise.all(pubPromises);
-    const validPublications = results.filter((p): p is YamlPublication => p !== null);
-
-    // Sort descending by year
-    return validPublications.sort((a, b) => b.year - a.year);
-  } catch (error) {
-    console.error('Failed to load all parallel publications:', error);
-    return [];
-  }
+      // Sort descending by year
+      const sorted = validPublications.sort((a, b) => b.year - a.year);
+      publicationsCache = sorted;
+      return sorted;
+    } catch (error) {
+      console.error('Failed to load all parallel publications:', error);
+      return [];
+    } finally {
+      loadPublicationsPromise = null;
+    }
+  })();
+  
+  return loadPublicationsPromise;
 }

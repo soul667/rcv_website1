@@ -8,6 +8,7 @@ import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import { useEffect, useState } from 'react';
 import { getAssetUrl } from '../utils/paths';
+import { ImageWithFallback } from './figma/ImageWithFallback';
 // import { ContactPreview } from './previews/ContactPreview';
 
 export function HomePage() {
@@ -70,6 +71,16 @@ export function HomePage() {
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     rehypePlugins={[rehypeRaw]}
+                    components={{
+                      img: ({ src, alt, ...props }) => {
+                        let absoluteSrc = src;
+                        // Handle relative images in docs/ folder
+                        if (src && !src.startsWith('http') && !src.startsWith('/')) {
+                          absoluteSrc = getAssetUrl(`docs/${src}`);
+                        }
+                        return <ImageWithFallback src={absoluteSrc} alt={alt} {...props} />;
+                      }
+                    }}
                   >
                     {mdContent}
                   </ReactMarkdown>

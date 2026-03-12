@@ -1,125 +1,155 @@
 {
-  "generatedAt": "2026-03-12T15:38:57.148Z",
+  "generatedAt": "2026-03-12T16:23:23.469Z",
   "authors": [
     {
       "id": "Hong_Zhang",
-      "weight": 1
+      "weight": 1,
+      "avatar": "content/authors/Hong_Zhang/avatar.png"
     },
     {
       "id": "Li-He",
-      "weight": 2
+      "weight": 2,
+      "avatar": "content/authors/Li-He/avatar.jpg"
     },
     {
       "id": "Jiamin_Zheng",
-      "weight": 20
+      "weight": 20,
+      "avatar": "content/authors/Jiamin_Zheng/avatar.jpg"
     },
     {
       "id": "Yufan_Mao",
-      "weight": 20
+      "weight": 20,
+      "avatar": "content/authors/Yufan_Mao/avatar.jpg"
     },
     {
       "id": "Jingwen_Yu",
-      "weight": 21
+      "weight": 21,
+      "avatar": "content/authors/Jingwen_Yu/avatar.jpg"
     },
     {
       "id": "Mingzhe_Lv",
-      "weight": 21
+      "weight": 21,
+      "avatar": "content/authors/Mingzhe_Lv/avatar.jpeg"
     },
     {
       "id": "Bingxi_Liu",
-      "weight": 22
+      "weight": 22,
+      "avatar": "content/authors/Bingxi_Liu/avatar.jpg"
     },
     {
       "id": "Hanjing_Ye",
-      "weight": 22
+      "weight": 22,
+      "avatar": "content/authors/Hanjing_Ye/avatar.jpeg"
     },
     {
       "id": "Changfei_Fu",
-      "weight": 23
+      "weight": 23,
+      "avatar": "content/authors/Changfei_Fu/avatar.jpg"
     },
     {
       "id": "Chengjie_Zhang",
-      "weight": 23
+      "weight": 23,
+      "avatar": "content/authors/Chengjie_Zhang/avatar.jpg"
     },
     {
       "id": "Guangcheng_Chen",
-      "weight": 23
+      "weight": 23,
+      "avatar": "content/authors/Guangcheng_Chen/avatar.jpg"
     },
     {
       "id": "Jiarui_Xu",
-      "weight": 23
+      "weight": 23,
+      "avatar": "content/authors/Jiarui_Xu/avatar_formal.jpg"
     },
     {
       "id": "Luyao_Liu",
-      "weight": 23
+      "weight": 23,
+      "avatar": "content/authors/Luyao_Liu/avatar.jpg"
     },
     {
       "id": "Wenlong_Dong",
-      "weight": 23
+      "weight": 23,
+      "avatar": "content/authors/Wenlong_Dong/avatar.jpg"
     },
     {
       "id": "Yicheng_He",
-      "weight": 23
+      "weight": 23,
+      "avatar": "content/authors/Yicheng_He/avatar.jpg"
     },
     {
       "id": "Dehao_Huang",
-      "weight": 24
+      "weight": 24,
+      "avatar": "content/authors/Dehao_Huang/avatar.jpeg"
     },
     {
       "id": "Hejun_Wei",
-      "weight": 24
+      "weight": 24,
+      "avatar": "content/authors/Hejun_Wei/avatar.png"
     },
     {
       "id": "Huaqi_Tao",
-      "weight": 24
+      "weight": 24,
+      "avatar": "content/authors/Huaqi_Tao/avatar.jpg"
     },
     {
       "id": "Lihuang_Fang",
-      "weight": 24
+      "weight": 24,
+      "avatar": "content/authors/Lihuang_Fang/avatar.jpg"
     },
     {
       "id": "Senzi_Luo",
-      "weight": 24
+      "weight": 24,
+      "avatar": "content/authors/Senzi_Luo/avatar.jpg"
     },
     {
       "id": "Weixi_Situ",
-      "weight": 24
+      "weight": 24,
+      "avatar": "content/authors/Weixi_Situ/avatar.jpg"
     },
     {
       "id": "Zanjia_Tong",
-      "weight": 24
+      "weight": 24,
+      "avatar": "content/authors/Zanjia_Tong/avatar.jpg"
     },
     {
       "id": "Aoxiang_Gu",
-      "weight": 25
+      "weight": 25,
+      "avatar": "content/authors/Aoxiang_Gu/avatar.png"
     },
     {
       "id": "Bolin_Zou",
-      "weight": 25
+      "weight": 25,
+      "avatar": "content/authors/Bolin_Zou/avatar.jpg"
     },
     {
       "id": "Qianer_Li",
-      "weight": 25
+      "weight": 25,
+      "avatar": "content/authors/Qianer_Li/avatar.jpg"
     },
     {
       "id": "Tianle_Zeng",
-      "weight": 25
+      "weight": 25,
+      "avatar": "content/authors/Tianle_Zeng/avatar.jpg"
     },
     {
       "id": "Tingcui_Yan",
-      "weight": 25
+      "weight": 25,
+      "avatar": "content/authors/Tingcui_Yan/avatar.jpg"
     },
     {
       "id": "Yanci_wen",
-      "weight": 25
+      "weight": 25,
+      "avatar": "content/authors/Yanci_wen/avatar.jpg"
     },
     {
       "id": "Yu_Zhan",
-      "weight": 25
+      "weight": 25,
+      "avatar": "content/authors/Yu_Zhan/avatar.jpg"
     },
     {
       "id": "Weinan_Chen",
-      "weight": 30
+      "weight": 30,
+      "avatar": "content/authors/Weinan_Chen/avatar.jpg"
     }
   ]
 }

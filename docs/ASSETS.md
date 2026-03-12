@@ -18,6 +18,12 @@ All static resources now live under `public/assets` so they are shipped with the
    - Content files already under `public/content/...`: `getContentUrl('authors/Name/_index.md')`
 3. Commit only the files you added. Large, unused, or experimental files should go in `trash/` for manual review.
 
+## Image Optimization (Important)
+Large unoptimized imagery (e.g. 5~10MB) can freeze the UI and create jagged scrolling. A utility script is provided to automatically losslessly optimize image assets without breaking aspect ratios:
+- Run `npm run images:compress` from the project root.
+- The script uses `sharp` to safely downsample images > 500KB to Web-friendly sizes (e.g., maximum 1920px for hero carousels and 640px for author avatars), reducing sizes by ~80% with invisible quality loss.
+- **GIFs**: Large animated GIFs (>2MB) should be converted to highly compressed MP4 videos since our React Markdown engine seamlessly auto-plays them natively without controls: `npm run images:convert-gifs`.
+
 ## Home and alumni Markdown
 - Home intro: `public/assets/docs/home_zh.md`, `public/assets/docs/home_en.md`
 - Alumni list: `public/assets/docs/alumni_zh.md`, `public/assets/docs/alumni_en.md`

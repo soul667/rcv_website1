@@ -125,7 +125,9 @@ function syncAuthorsIndex() {
       const authorId = entry.name;
       const indexPath = path.join(authorsDir, authorId, '_index.md');
       let weight = 999;
+      let avatarUrl = 'assets/media/authors_research/default_avatar.png'; // Fallback
 
+      // Read weight from frontmatter
       if (fs.existsSync(indexPath)) {
         try {
           const parsed = matter.read(indexPath);
@@ -137,7 +139,38 @@ function syncAuthorsIndex() {
         }
       }
 
-      return { id: authorId, weight };
+      // Precompute valid avatar path purely using file system
+      const exts = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
+      const names = ['avatar', 'avatar_formal', authorId.toLowerCase()];
+      
+      let foundAvatar = false;
+      const localDir = path.join(authorsDir, authorId);
+      for (const name of names) {
+        if (foundAvatar) break;
+        for (const ext of exts) {
+          if (fs.existsSync(path.join(localDir, name + ext))) {
+            avatarUrl = `content/authors/${authorId}/${name}${ext}`;
+            foundAvatar = true;
+            break;
+          }
+        }
+      }
+
+      if (!foundAvatar) {
+        const sharedDir = path.join(repoRoot, 'public', 'assets', 'media', 'authors_research');
+        for (const name of names) {
+          if (foundAvatar) break;
+          for (const ext of exts) {
+            if (fs.existsSync(path.join(sharedDir, name + ext))) {
+              avatarUrl = `assets/media/authors_research/${name}${ext}`;
+              foundAvatar = true;
+              break;
+            }
+          }
+        }
+      }
+
+      return { id: authorId, weight, avatar: avatarUrl };
     })
     .sort((a, b) => a.weight - b.weight);
 

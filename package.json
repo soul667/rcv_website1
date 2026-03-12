@@ -76,6 +76,8 @@
             "publications:sync": "node scripts/sync_publications_index.js",
             "research:add": "node scripts/add_research_area.js",
             "hero:slides": "node scripts/generate_hero_slides_snippet.js",
+            "images:compress": "node scripts/compress_images.js",
+            "images:convert-gifs": "node scripts/convert_gifs.js",
             "test:members": "node test/validate-members.js",
             "test:publications": "node test/validate-publications.js",
             "test:content": "npm run test:members && npm run test:publications"

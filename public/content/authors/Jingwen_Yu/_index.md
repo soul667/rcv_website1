@@ -35,11 +35,11 @@ Currently, my research interests focus on long-term visual localization in dynam
 
 3. Building High Precision Dataset for SLAM Across Diverse Platforms and Scalable Environments (采集高精度SLAM数据集)
 
-<img src="img3.gif" width=600>
+<img src="img3.mp4" width=600>
 
 4. UGV-Quadrupedal Robot Autonomous Delivery (无人车-四足机器人自动送货)
 
-<img src="img4.gif" width=600>
+<img src="img4.mp4" width=600>
 
 5. Relationship Oriented Semantic Scene Understanding for Daily Manipulation Tasks (面向日常操作任务的由交互关系导向的场景语义理解）
 

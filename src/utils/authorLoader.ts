@@ -1,5 +1,5 @@
 import matter from 'gray-matter';
-import { getAssetUrl, getContentUrl } from './paths';
+import { getAssetUrl, getContentUrl, getPublicUrl } from './paths';
 
 export interface AuthorData {
   id: string;
@@ -31,7 +31,7 @@ export interface AuthorData {
   markdownContent?: string; // 添加完整的markdown内容
 }
 
-type AuthorIndexEntry = string | { id: string; weight?: number };
+type AuthorIndexEntry = string | { id: string; weight?: number; avatar?: string };
 
 const FALLBACK_AUTHOR_DIRS: string[] = [
   'Aoxiang_Gu', 'Bingxi_Liu', 'Bolin_Zou', 'Changfei_Fu', 'Chengjie_Zhang', 
@@ -43,7 +43,7 @@ const FALLBACK_AUTHOR_DIRS: string[] = [
   'Lina_Sun', 'Ravi_Patel', 'Meiling_Chen', 'Haoran_Zhou'
 ];
 
-async function getAuthorDirectories(): Promise<string[]> {
+async function getAuthorDirectories(): Promise<{ id: string; avatar?: string }[]> {
   try {
     const response = await fetch(getAssetUrl('data/authors.json'));
     if (!response.ok) {
@@ -51,25 +51,35 @@ async function getAuthorDirectories(): Promise<string[]> {
     }
 
     const payload = await response.json();
-    let ids: string[] = [];
+    let entries: { id: string; avatar?: string }[] = [];
 
     if (Array.isArray(payload)) {
-      ids = payload.map((entry) => String(entry).trim()).filter(Boolean);
-    } else if (Array.isArray((payload as { authors?: AuthorIndexEntry[] }).authors)) {
-      ids = (payload as { authors: AuthorIndexEntry[] }).authors
-        .map((entry) => (typeof entry === 'string' ? entry : entry?.id))
-        .map((id) => (id ? String(id).trim() : ''))
-        .filter(Boolean);
+      entries = payload.map((entry) => ({ id: String(entry).trim() })).filter(e => e.id);
+    } else if (Array.isArray((payload as any).authors)) {
+      entries = (payload as any).authors
+        .map((entry: any) => {
+          if (typeof entry === 'string') return { id: entry };
+          return { id: entry?.id, avatar: entry?.avatar };
+        })
+        .filter((e: any) => e.id);
     }
 
-    if (ids.length > 0) {
-      return Array.from(new Set(ids));
+    if (entries.length > 0) {
+      const uniqueIds = new Set<string>();
+      const result: { id: string; avatar?: string }[] = [];
+      for (const entry of entries) {
+        if (!uniqueIds.has(entry.id)) {
+          uniqueIds.add(entry.id);
+          result.push(entry);
+        }
+      }
+      return result;
     }
   } catch (error) {
     console.warn('Falling back to built-in author list:', error);
   }
 
-  return FALLBACK_AUTHOR_DIRS;
+  return FALLBACK_AUTHOR_DIRS.map(id => ({ id }));
 }
 
 function extractSocialLinks(content: string): { icon: string; icon_pack: string; link: string }[] {
@@ -306,7 +316,7 @@ function extractPublications(text: string) {
 }
 
 // Load author data from markdown file
-export async function loadAuthorData(authorId: string): Promise<AuthorData | null> {
+export async function loadAuthorData(authorId: string, precomputedAvatar?: string): Promise<AuthorData | null> {
   try {
     const response = await fetch(getContentUrl(`authors/${authorId}/_index.md`));
     if (!response.ok) return null;
@@ -315,62 +325,10 @@ export async function loadAuthorData(authorId: string): Promise<AuthorData | nul
     const { frontmatter, body } = parseFrontmatter(content);
     const sections = parseMarkdownBody(body);
     
-    // Get avatar image - try multiple paths and extensions
-    let image = getAssetUrl('media/authors_research/default_avatar.png'); // fallback
-    
-    // List of possible image names and extensions
-    const imageNames = ['avatar', 'avatar_formal', authorId.toLowerCase()];
-    const imageExtensions = ['png', 'jpg', 'jpeg', 'gif']; // PNG first since most avatars are PNG
-    
-    // Correct paths for Vite/public folder structure
-    const imagePaths = [
-      getContentUrl(`authors/${authorId}`),  // This maps to /public/content/authors/{authorId}/
-      getAssetUrl('media/authors_research') // This maps to /assets/media/authors_research/
-    ];
-    
-    let imageFound = false;
-    
-    // Try different combinations of paths, names, and extensions
-    for (const path of imagePaths) {
-      if (imageFound) break;
-      
-      for (const name of imageNames) {
-        if (imageFound) break;
-        
-        for (const ext of imageExtensions) {
-          const testPath = `${path}/${name}.${ext}`;
-          
-          try {
-            // Create a new Image object to test if the image loads
-            const testImage = new Image();
-            
-            // Use a promise to check if the image loads
-            const imageExists = await new Promise<boolean>((resolve) => {
-              testImage.onload = () => resolve(true);
-              testImage.onerror = () => resolve(false);
-              
-              // Set a timeout to avoid hanging
-              setTimeout(() => resolve(false), 3000);
-              
-              testImage.src = testPath;
-            });
-            
-            if (imageExists) {
-              image = testPath;
-              imageFound = true;
-              break;
-            }
-          } catch (error) {
-            continue;
-          }
-        }
-      }
-    }
-    
-    // If no image found, use default
-    if (!imageFound) {
-      console.warn(`No image found for ${authorId}, using default`);
-    }
+    // Use precomputed avatar from authors.json if available, skipping any network probes completely
+    let image = precomputedAvatar 
+      ? getPublicUrl(precomputedAvatar) 
+      : getPublicUrl('assets/media/authors_research/default_avatar.png');
     
     const frontmatterSocial = Array.isArray(frontmatter.social) ? frontmatter.social : [];
     const parsedSocial = frontmatterSocial.length > 0
@@ -424,19 +382,35 @@ export async function loadAuthorData(authorId: string): Promise<AuthorData | nul
   }
 }
 
+let authorsCache: AuthorData[] | null = null;
+let loadAuthorsPromise: Promise<AuthorData[]> | null = null;
+
 // Load all authors
 export async function loadAllAuthors(): Promise<AuthorData[]> {
-  const authorDirs = await getAuthorDirectories();
+  if (authorsCache) return authorsCache;
+  if (loadAuthorsPromise) return loadAuthorsPromise;
 
-  // Load all authors in parallel instead of sequentially
-  const results = await Promise.all(
-    authorDirs.map(authorId => loadAuthorData(authorId))
-  );
+  loadAuthorsPromise = (async () => {
+    try {
+      const authorDirs = await getAuthorDirectories();
+
+      // Load all authors in parallel instead of sequentially
+      const results = await Promise.all(
+        authorDirs.map(entry => loadAuthorData(entry.id, entry.avatar))
+      );
+      
+      const authors = results.filter((a): a is AuthorData => a !== null);
+      
+      // Sort by weight (lower weight = higher priority)
+      const sorted = authors.sort((a, b) => (a.weight || 999) - (b.weight || 999));
+      authorsCache = sorted;
+      return sorted;
+    } finally {
+      loadAuthorsPromise = null;
+    }
+  })();
   
-  const authors = results.filter((a): a is AuthorData => a !== null);
-  
-  // Sort by weight (lower weight = higher priority)
-  return authors.sort((a, b) => (a.weight || 999) - (b.weight || 999));
+  return loadAuthorsPromise;
 }
 
 // Categorize authors by role

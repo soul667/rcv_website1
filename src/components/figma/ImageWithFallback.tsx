@@ -30,25 +30,44 @@ export function ImageWithFallback(props: React.ImgHTMLAttributes<HTMLImageElemen
     )
   }
 
+  const isVideo = src?.toLowerCase().match(/\.(mp4|webm|mov)$/)
+  
   return (
     <div className={`relative overflow-hidden ${className ?? ''}`} style={style}>
       {/* Skeleton pulse placeholder */}
       {status === 'loading' && (
         <div className="absolute inset-0 bg-slate-700/50 animate-pulse rounded-[inherit]" />
       )}
-      <img
-        ref={imgRef}
-        src={src}
-        alt={alt}
-        loading={loading ?? 'lazy'}
-        decoding={(decoding as any) ?? 'async'}
-        className={`w-full h-full object-cover transition-opacity duration-300 ${
-          status === 'loaded' ? 'opacity-100' : 'opacity-0'
-        }`}
-        onLoad={handleLoad}
-        onError={handleError}
-        {...rest}
-      />
+      {isVideo ? (
+        <video
+          src={src}
+          title={alt}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className={`w-full h-full object-cover transition-opacity duration-300 ${
+            status === 'loaded' ? 'opacity-100' : 'opacity-0'
+          }`}
+          onLoadedData={handleLoad}
+          onError={handleError}
+          {...rest as any}
+        />
+      ) : (
+        <img
+          ref={imgRef}
+          src={src}
+          alt={alt}
+          loading={loading ?? 'lazy'}
+          decoding={(decoding as any) ?? 'async'}
+          className={`w-full h-full object-cover transition-opacity duration-300 ${
+            status === 'loaded' ? 'opacity-100' : 'opacity-0'
+          }`}
+          onLoad={handleLoad}
+          onError={handleError}
+          {...rest}
+        />
+      )}
     </div>
   )
 }

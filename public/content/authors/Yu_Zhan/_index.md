@@ -20,5 +20,5 @@ user_groups:
 I am a Ph.D. Student at  RCV Lab SUSTech & Pengcheng Laboratory,  advised by Prof. Hong Zhang and Prof. Wenjun Xu. I previously graduated from WHU with a B.E. in Microeletronics and from SUSTech with a M.E. in EE. My research interests involve human-robot interaction, robot person-following and human perception from a robot's view.
 
 ### Research
-![research](Our_Method_360.gif "Research Introduction")
+![research](Our_Method_360.mp4 "Research Introduction")
 

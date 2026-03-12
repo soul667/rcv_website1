@@ -222,7 +222,15 @@ export function ResearchPage() {
               {/* Description */}
               <div className="max-w-4xl markdown-custom-wrapper">
                 <div className="markdown-body p-0 bg-transparent theme-soft">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                  <ReactMarkdown 
+                    remarkPlugins={[remarkGfm]} 
+                    rehypePlugins={[rehypeRaw]}
+                    components={{
+                      img: ({ src, alt, ...props }) => (
+                        <ImageWithFallback src={src} alt={alt} {...props} />
+                      )
+                    }}
+                  >
                     {language === 'zh' ? active.description.zh : active.description.en}
                   </ReactMarkdown>
                 </div>
@@ -290,7 +298,15 @@ export function ResearchPage() {
                    </h2>
                   <div className="theme-soft text-sm leading-relaxed mb-6 markdown-custom-wrapper">
                     <div className="markdown-body p-0 bg-transparent theme-soft">
-                      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                      <ReactMarkdown 
+                        remarkPlugins={[remarkGfm]} 
+                        rehypePlugins={[rehypeRaw]}
+                        components={{
+                          img: ({ src, alt, ...props }) => (
+                            <ImageWithFallback src={src} alt={alt} {...props} />
+                          )
+                        }}
+                      >
                         {language === 'zh' ? area.description.zh : area.description.en}
                       </ReactMarkdown>
                     </div>

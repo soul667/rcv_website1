@@ -62,4 +62,7 @@
 - 论文：`npm run publications:add -- ./your.json`、`npm run publications:sync`
 - 研究：`npm run research:add -- ./your.json`
 - 首图：`npm run hero:slides`
+- 优化与媒体降维：
+  - `npm run images:compress`：自动搜索全站 `>500KB` 的图片并限制宽幅、无损安全压缩，大幅优化初次页面响应。
+  - `npm run images:convert-gifs`：自动检索全站 `>2MB` 的巨大化 GIF 动图，将其无缝替换为极致流畅的超小 MP4 视频，且会自动修改 MD 或 YAML 中的引用字段。
 - 校验：`npm run test:members`、`npm run test:publications`、`npm run test:content`
