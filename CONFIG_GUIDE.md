@@ -35,7 +35,7 @@ show_indicators = true        # 是否显示底部指示点
 
 ## 如何修改轮播图
 
-1. **添加新图片：** 将图片放入 `assets/media/home_slides/` 文件夹
+1. **添加新图片：** 将图片放入 `public/assets/media/home_slides/` 文件夹，并在代码中使用 `getAssetUrl('media/home_slides/文件名')` 引用，确保兼容 `base` 路径。
 2. **修改轮播列表：** 编辑 `config.toml` 中的 `slides` 数组
 3. **调整设置：** 修改自动播放、显示时间等参数
 

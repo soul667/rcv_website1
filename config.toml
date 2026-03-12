@@ -2,7 +2,7 @@
 
 [hero]
 # Hero section slides configuration
-# Images should be placed in assets/media/home_slides/
+# Images should be placed in public/assets/media/home_slides/
 # You can modify this list to add/remove/reorder slides
 slides = [
   { image = "home_8.jpg", alt = "RCV Lab Main Facility" },

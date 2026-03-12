@@ -8,9 +8,8 @@ import { getTeamCarouselConfig } from '../utils/config';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
-import alumniZh from '../../assets/docs/alumni_zh.md?raw';
-import alumniEn from '../../assets/docs/alumni_en.md?raw';
 import { AnimatePresence, motion } from 'framer-motion';
+import { getAssetUrl } from '../utils/paths';
 
 // Module-level cache for author data
 let cachedAuthors: AuthorData[] | null = null;
@@ -55,6 +54,9 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'theme-page py-2
   const [authors, setAuthors] = useState<AuthorData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [alumniContent, setAlumniContent] = useState('');
+  const [alumniLoading, setAlumniLoading] = useState(true);
+  const [alumniError, setAlumniError] = useState<string | null>(null);
   const [viewportWidth, setViewportWidth] = useState(() => window.innerWidth);
   const teamCarouselConfig = getTeamCarouselConfig();
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -133,6 +135,39 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'theme-page py-2
 
     loadAuthorsData();
   }, []);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const loadAlumni = async () => {
+      setAlumniLoading(true);
+      setAlumniError(null);
+      try {
+        const url = getAssetUrl(`docs/${language === 'zh' ? 'alumni_zh.md' : 'alumni_en.md'}`);
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Failed to load alumni content (${response.status})`);
+        }
+        const text = await response.text();
+        if (!isCancelled) {
+          setAlumniContent(text);
+        }
+      } catch (err) {
+        if (!isCancelled) {
+          setAlumniError('Failed to load alumni information.');
+        }
+      } finally {
+        if (!isCancelled) {
+          setAlumniLoading(false);
+        }
+      }
+    };
+
+    loadAlumni();
+    return () => {
+      isCancelled = true;
+    };
+  }, [language]);
 
   if (loading) {
     return (
@@ -629,12 +664,16 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'theme-page py-2
               }
             `}</style>
             <div className="markdown-body">
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypeRaw]}
-              >
-                {language === 'zh' ? alumniZh : alumniEn}
-              </ReactMarkdown>
+              {alumniLoading && <p className="theme-muted">{t('loading') || 'Loading...'}</p>}
+              {alumniError && <p className="text-red-500">{alumniError}</p>}
+              {!alumniLoading && !alumniError && (
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeRaw]}
+                >
+                  {alumniContent}
+                </ReactMarkdown>
+              )}
             </div>
           </div>
         </div>

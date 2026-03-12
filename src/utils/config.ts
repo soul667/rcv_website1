@@ -1,5 +1,4 @@
-// Configuration utilities
-// This file can be expanded to read from actual config files in the future
+import { getAssetUrl } from './paths';
 
 export interface HeroSlide {
   image: string;
@@ -23,12 +22,12 @@ export interface SiteConfig {
 // Default configuration - can be replaced with actual file reading
 export const defaultHeroConfig: HeroConfig = {
   slides: [
-    { image: "/assets/media/home_slides/home_8.png", alt: "RCV Lab Main Facility" },
-    { image: "/assets/media/home_slides/home_9.jpg", alt: "Research Laboratory Environment" },
-    { image: "/assets/media/home_slides/home_14.jpg", alt: "Advanced Equipment and Technology" },
-    { image: "/assets/media/home_slides/home_15.png", alt: "University Campus Building" },
-    // { image: "/assets/media/home_slides/home_5.jpg", alt: "Engineering Research Facility" },
-    // { image: "/assets/media/home_slides/home_6.jpg", alt: "Modern Laboratory Setup" },
+    { image: getAssetUrl('media/home_slides/home_8.png'), alt: "RCV Lab Main Facility" },
+    { image: getAssetUrl('media/home_slides/home_9.jpg'), alt: "Research Laboratory Environment" },
+    { image: getAssetUrl('media/home_slides/home_14.jpg'), alt: "Advanced Equipment and Technology" },
+    { image: getAssetUrl('media/home_slides/home_15.png'), alt: "University Campus Building" },
+    // { image: getAssetUrl('media/home_slides/home_5.jpg'), alt: "Engineering Research Facility" },
+    // { image: getAssetUrl('media/home_slides/home_6.jpg'), alt: "Modern Laboratory Setup" },
   ],
   autoPlay: true,
   slideDuration: 5000,
@@ -39,11 +38,11 @@ export const defaultHeroConfig: HeroConfig = {
 // Default team carousel configuration
 export const defaultTeamCarouselConfig: HeroConfig = {
   slides: [
-    { image: "/assets/media/home_slides/home_1.jpg", alt: "Lab Team Meeting" },
-    { image: "/assets/media/home_slides/home_2.jpg", alt: "Research Discussion" },
-    { image: "/assets/media/home_slides/home_3.jpg", alt: "Lab Workspace" },
-    { image: "/assets/media/home_slides/home_4.jpg", alt: "Team Collaboration" },
-    { image: "/assets/media/home_slides/home_5.jpg", alt: "Lab Environment" },
+    { image: getAssetUrl('media/home_slides/home_1.jpg'), alt: "Lab Team Meeting" },
+    { image: getAssetUrl('media/home_slides/home_2.jpg'), alt: "Research Discussion" },
+    { image: getAssetUrl('media/home_slides/home_3.jpg'), alt: "Lab Workspace" },
+    { image: getAssetUrl('media/home_slides/home_4.jpg'), alt: "Team Collaboration" },
+    { image: getAssetUrl('media/home_slides/home_5.jpg'), alt: "Lab Environment" },
   ],
   autoPlay: true,
   slideDuration: 4000,

@@ -1,36 +1,27 @@
 
-  # rcv_website
+# RCV Website
 
-  This is a code bundle for rcv_website. The original project is available at https://www.figma.com/design/rQRWqzNs7fvIzfHVW5gIMw/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E4%B8%BB%E9%A1%B5%E7%BD%91%E7%AB%99.
+React + Vite single-page site for the Robotics and Computer Vision Lab.
 
-  ## Running the code
+## Quick start
+- Install: `npm install`
+- Develop: `npm run dev` (open http://localhost:5173/rcv_website/ because `base` is `/rcv_website/`)
+- Build: `npm run build`
 
-  ```shell
-  sudo apt update
-  sudo apt install nodejs npm
-  ```
-  Run `pnpm i` to install the dependencies.
+## Assets & content
+- All static resources live in `public/assets` (media, docs, data). See `ASSETS.md` for how to add new images, markdown, or BibTeX while keeping URLs working after deployment.
+- Use the helpers in `src/utils/paths.ts` (`getAssetUrl`, `getContentUrl`) instead of hardcoding `/assets` or `/content` so paths include the `base` prefix in production.
+- Home/alumni markdown lives in `public/assets/docs/`; author/profile content lives in `public/content/authors/`.
 
-  Run `pnpm run dev` to start the development server.
+## Trash (pending deletion)
+Legacy update scripts and unused assets were moved to `trash/` so they no longer ship with the site. Delete them after review if you don’t need them.
 
-  ## Background Color Variables
-
-  Background colors are controlled in `src/index.css`.
-
-  Edit these variables under `:root`:
-
-  - `--page-bg-gray-900`: used by `.bg-gray-900`
-  - `--page-bg-slate-900`: used by `.bg-slate-900`
-
-  Mapping is defined near the bottom of `src/index.css`:
-
-  - `.bg-gray-900 { background-color: var(--page-bg-gray-900) !important; }`
-  - `.bg-slate-900 { background-color: var(--page-bg-slate-900) !important; }`
-  
-
-  ## Need Update
-  -  实验室的仪器设备需要更新
-  -  每个人的文章需要更新 （收集文章名即可，导出bibtex）
-
-
-# install typst
+## Screenshots
+- Light – Home hero (desktop)  
+  ![](public/assets/media/readme/home-desktop-light.png)
+- Dark – Team page (tablet)  
+  ![](public/assets/media/readme/team-tablet-dark.png)
+- Light – Research page (mobile)  
+  ![](public/assets/media/readme/research-mobile-light.png)
+- Dark – Publications page (desktop)  
+  ![](public/assets/media/readme/publications-desktop-dark.png)

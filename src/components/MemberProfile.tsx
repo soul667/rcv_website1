@@ -7,6 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import { useEffect, useState } from 'react';
+import { getAssetUrl, getContentUrl, getPublicUrl } from '../utils/paths';
 
 interface MemberProfileProps {
   member: {
@@ -211,7 +212,7 @@ export function MemberProfile({ member, onBack, previousPage }: MemberProfilePro
     let isCancelled = false;
     const loadSocialFromMarkdown = async () => {
       try {
-        const response = await fetch(`/content/authors/${member.id}/_index.md`);
+        const response = await fetch(getContentUrl(`authors/${member.id}/_index.md`));
         if (!response.ok) return;
 
         const content = await response.text();
@@ -314,13 +315,17 @@ export function MemberProfile({ member, onBack, previousPage }: MemberProfilePro
                       // Handle image path resolution
                       let imageSrc = src;
                       
-                      if (src && !src.startsWith('http') && !src.startsWith('/') && !src.startsWith('data:')) {
+                      if (src && src.startsWith('/assets/')) {
+                        imageSrc = getAssetUrl(src.replace('/assets/', ''));
+                      } else if (src && src.startsWith('/content/')) {
+                        imageSrc = getPublicUrl(src);
+                      } else if (src && !src.startsWith('http') && !src.startsWith('/') && !src.startsWith('data:')) {
                         // Handle authors_research path mapping
                         if (src.startsWith('authors_research/')) {
-                          imageSrc = `/assets/${src}`;
+                          imageSrc = getAssetUrl(`media/${src}`);
                         } else {
                           // If src is relative (starts with just filename), prepend the author's folder path
-                          imageSrc = `/content/authors/${member.id}/${src}`;
+                          imageSrc = getContentUrl(`authors/${member.id}/${src}`);
                         }
                       }
                       

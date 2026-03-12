@@ -127,7 +127,7 @@ function cleanText(text: string): string {
 
 export async function loadPublications(): Promise<Publication[]> {
   try {
-    const response = await fetch('/assets/publications.bib');
+    const response = await fetch(getAssetUrl('data/publications.bib'));
     const bibContent = await response.text();
     return parseBibFile(bibContent);
   } catch (error) {
@@ -135,3 +135,4 @@ export async function loadPublications(): Promise<Publication[]> {
     return [];
   }
 }
+import { getAssetUrl } from './paths';

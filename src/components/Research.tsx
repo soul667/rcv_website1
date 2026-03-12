@@ -3,6 +3,7 @@ import { useRouter } from './Router';
 import { useEffect, useState, useCallback } from 'react';
 import { parse as parseTOML } from 'smol-toml';
 import { ChevronRight, Users, Tag } from 'lucide-react';
+import { getContentUrl } from '../utils/paths';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -60,7 +61,7 @@ export function Research() {
       const results: ResearchArea[] = [];
       for (const dir of RESEARCH_DIRS) {
         try {
-          const url = `/content/research/${encodeURIComponent(dir)}/index.toml`;
+          const url = getContentUrl(`research/${encodeURIComponent(dir)}/index.toml`);
           const res = await fetch(url);
           if (!res.ok) continue;
           const text = await res.text();

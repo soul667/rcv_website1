@@ -1,4 +1,5 @@
 import { parse as parseTOML } from 'smol-toml';
+import { getContentUrl } from './paths';
 
 interface ResearchArea {
   meta: {
@@ -38,7 +39,7 @@ export async function loadResearchAreas(): Promise<ResearchArea[]> {
   const results = await Promise.all(
     researchFolders.map(async (folder) => {
       try {
-        const response = await fetch(`/content/research/${encodeURIComponent(folder)}/index.toml`);
+        const response = await fetch(getContentUrl(`research/${encodeURIComponent(folder)}/index.toml`));
         if (!response.ok) {
           console.warn(`Failed to load research area TOML: ${folder}`);
           return null;
@@ -46,9 +47,21 @@ export async function loadResearchAreas(): Promise<ResearchArea[]> {
         
         const content = await response.text();
         const data = parseTOML(content) as any;
+
+        const imageName = data.meta?.image
+          ? String(data.meta.image).replace(/^\/+/, '')
+          : '';
+
+        const meta = {
+          ...data.meta,
+          image: imageName
+            ? getContentUrl(`research/${encodeURIComponent(folder)}/${imageName}`)
+            : ''
+        };
         
         return {
           ...data,
+          meta,
           folderPath: folder
         } as ResearchArea;
       } catch (error) {

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useLanguage } from './LanguageContext';
 import { useRouter } from './Router';
 import { useTheme } from './ThemeContext';
+import { getAssetUrl } from '../utils/paths';
 
 export function Header() {
   const [showDesktopTitle, setShowDesktopTitle] = useState(() => window.innerWidth >= 1100);
@@ -10,6 +11,8 @@ export function Header() {
   const { navigateTo, currentPage } = useRouter();
   const { theme, toggleTheme } = useTheme();
   const drawerId = 'mobile-nav-drawer';
+  const logo = getAssetUrl('media/logo.png');
+  const eeLogo = getAssetUrl('media/ee-logo.png');
 
   useEffect(() => {
     const handleResize = () => {
@@ -57,7 +60,7 @@ export function Header() {
                 <button onClick={() => navigateTo('home')} className="text-left group">
                   <div className="flex items-center space-x-2">
                     <img
-                      src="/assets/media/logo.png"
+                      src={logo}
                       alt="RCV Logo"
                       className="h-10 w-10 object-contain filter brightness-110"
                     />
@@ -135,8 +138,8 @@ export function Header() {
             {/* Logo */}
             <button onClick={() => navigateTo('home')} className="text-left group">
               <div className="flex items-center space-x-3">
-                <img src="/assets/media/logo.png" alt="EE Logo" className="h-12 w-12 object-contain transition-transform duration-300 group-hover:scale-110 filter brightness-110" />
-                <img src="/assets/media/ee-logo.png" alt="EE Logo" className="h-12 w-12 object-contain transition-transform duration-300 group-hover:scale-110 filter brightness-110" onError={(e) => { e.currentTarget.src = "/assets/media/logo.png"; }} />
+                <img src={logo} alt="EE Logo" className="h-12 w-12 object-contain transition-transform duration-300 group-hover:scale-110 filter brightness-110" />
+                <img src={eeLogo} alt="EE Logo" className="h-12 w-12 object-contain transition-transform duration-300 group-hover:scale-110 filter brightness-110" onError={(e) => { e.currentTarget.src = logo; }} />
                 {showDesktopTitle && (
                   <div className="text-[color:var(--foreground)] font-semibold text-lg">
                     {language === 'zh' ? '机器人与计算机视觉实验室' : 'Robotics and Computer Vision Lab'}

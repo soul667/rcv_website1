@@ -1,4 +1,5 @@
 import matter from 'gray-matter';
+import { getAssetUrl, getContentUrl } from './paths';
 
 export interface AuthorData {
   id: string;
@@ -266,7 +267,7 @@ function extractPublications(text: string) {
 // Load author data from markdown file
 export async function loadAuthorData(authorId: string): Promise<AuthorData | null> {
   try {
-    const response = await fetch(`/content/authors/${authorId}/_index.md`);
+    const response = await fetch(getContentUrl(`authors/${authorId}/_index.md`));
     if (!response.ok) return null;
     
     const content = await response.text();
@@ -274,7 +275,7 @@ export async function loadAuthorData(authorId: string): Promise<AuthorData | nul
     const sections = parseMarkdownBody(body);
     
     // Get avatar image - try multiple paths and extensions
-    let image = '/assets/media/authors_research/default_avatar.png'; // fallback
+    let image = getAssetUrl('media/authors_research/default_avatar.png'); // fallback
     
     // List of possible image names and extensions
     const imageNames = ['avatar', 'avatar_formal', authorId.toLowerCase()];
@@ -282,8 +283,8 @@ export async function loadAuthorData(authorId: string): Promise<AuthorData | nul
     
     // Correct paths for Vite/public folder structure
     const imagePaths = [
-      `/content/authors/${authorId}`,  // This maps to /public/content/authors/{authorId}/
-      `/assets/media/authors_research` // This maps to /assets/media/authors_research/
+      getContentUrl(`authors/${authorId}`),  // This maps to /public/content/authors/{authorId}/
+      getAssetUrl('media/authors_research') // This maps to /assets/media/authors_research/
     ];
     
     let imageFound = false;

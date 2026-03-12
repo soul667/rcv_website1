@@ -6,13 +6,48 @@ import { TeamPreview } from './previews/TeamPreview';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
-import homeZh from '../../assets/docs/home_zh.md?raw';
-import homeEn from '../../assets/docs/home_en.md?raw';
+import { useEffect, useState } from 'react';
+import { getAssetUrl } from '../utils/paths';
 // import { ContactPreview } from './previews/ContactPreview';
 
 export function HomePage() {
   const { t, language } = useLanguage();
-  const mdContent = language === 'zh' ? homeZh : homeEn;
+  const [mdContent, setMdContent] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const loadContent = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const url = getAssetUrl(`docs/${language === 'zh' ? 'home_zh.md' : 'home_en.md'}`);
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Failed to load content: ${response.status}`);
+        }
+        const text = await response.text();
+        if (!isCancelled) {
+          setMdContent(text);
+        }
+      } catch (err) {
+        if (!isCancelled) {
+          setError('Failed to load home content.');
+        }
+      } finally {
+        if (!isCancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadContent();
+    return () => {
+      isCancelled = true;
+    };
+  }, [language]);
 
   return (
     <>
@@ -29,12 +64,16 @@ export function HomePage() {
           <div className="w-full">
             <div className="max-w-none">
               <div className="markdown-body">
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  rehypePlugins={[rehypeRaw]}
-                >
-                  {mdContent}
-                </ReactMarkdown>
+                {loading && <p className="theme-muted">{t('loading') || 'Loading...'}</p>}
+                {error && <p className="text-red-500">{error}</p>}
+                {!loading && !error && (
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    rehypePlugins={[rehypeRaw]}
+                  >
+                    {mdContent}
+                  </ReactMarkdown>
+                )}
               </div>
             </div>
           </div>

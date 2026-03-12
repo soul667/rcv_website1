@@ -1,5 +1,6 @@
 import { parse } from 'yaml';
 import { Publication } from './bibParser'; // Re-use the existing interface or define a new one
+import { getContentUrl } from './paths';
 
 export interface YamlPublication {
   id: string; // Used internally as key (folder name)
@@ -41,7 +42,7 @@ export async function loadAllYamlPublications(): Promise<YamlPublication[]> {
     const pubPromises = publicationFolders.map(async (folder) => {
       try {
         // Fetch YAML file
-        const res = await fetch(`/content/publication/${folder}/index.yaml`);
+        const res = await fetch(getContentUrl(`publication/${folder}/index.yaml`));
         if (!res.ok) return null;
         
         const yamlText = await res.text();
