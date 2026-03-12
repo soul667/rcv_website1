@@ -37,7 +37,10 @@ export function Header() {
   };
 
   const ThemeIcon = theme === 'dark' ? Sun : Moon;
-  const themeLabel = theme === 'dark' ? '切换到浅色模式' : '切换到暗黑模式';
+  const themeText = theme === 'dark' ? t('nav.light') : t('nav.dark');
+  const themeLabel = language === 'zh'
+    ? `切换到${themeText}模式`
+    : `Switch to ${themeText} mode`;
 
   return (
     <>
@@ -111,7 +114,7 @@ export function Header() {
                 className="theme-icon-button flex items-center gap-3 w-full px-4 py-3 rounded-lg transition-all duration-200 text-sm"
               >
                 <ThemeIcon className="h-4 w-4" />
-                <span>{theme === 'dark' ? '浅色模式' : '暗黑模式'}</span>
+                <span>{themeText}</span>
               </button>
               <button
                 onClick={() => { toggleLanguage(); closeDrawer(); }}
@@ -166,7 +169,7 @@ export function Header() {
                     className="theme-icon-button flex items-center px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full tracking-wide"
                   >
                     <ThemeIcon className="h-4 w-4 mr-2 opacity-90" />
-                    <span>{theme === 'dark' ? '浅色' : '暗黑'}</span>
+                    <span>{themeText}</span>
                   </button>
                   <button
                     onClick={toggleLanguage}
@@ -184,4 +187,3 @@ export function Header() {
     </>
   );
 }
-

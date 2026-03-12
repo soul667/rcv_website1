@@ -28,13 +28,15 @@
   --hero-overlay-start: rgba(2, 6, 23, 0.38);
   --hero-overlay-mid: rgba(2, 6, 23, 0.52);
   --hero-overlay-end: rgba(2, 6, 23, 0.72);
+  --surface-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
   --radius: 0.5rem;
 }
 
-.dark {
+.dark,
+[data-theme='dark'] {
   --background: #111827;
   --background-elevated: #1c1c1f;
-  --foreground: #f9fafb;
+  --foreground: #f3f4f6;
   --foreground-soft: rgba(209, 213, 219, 0.9);
   --foreground-muted: #9ca3af;
   --card: #1f2937;
@@ -54,6 +56,7 @@
   --overlay: rgba(255, 255, 255, 0.06);
   --overlay-strong: rgba(255, 255, 255, 0.12);
   --header-background: rgba(10, 15, 24, 0.72);
+  --surface-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
 }
 
 @theme inline {
@@ -210,11 +213,7 @@ html {
 .theme-surface {
   background: var(--panel);
   border: 1px solid var(--border);
-  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
-}
-
-.dark .theme-surface {
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--surface-shadow);
 }
 
 .theme-surface-strong {

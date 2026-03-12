@@ -16,7 +16,7 @@ export function BackButton({ onClick, label, theme = 'dark', className = '' }: B
   const themeClasses =
     theme === 'dark'
       ? 'theme-icon-button hover:text-[color:var(--foreground)]'
-      : 'text-slate-600 bg-slate-50 border border-slate-200 hover:bg-slate-100 hover:text-slate-800 hover:border-slate-300 hover:shadow-[0_0_15px_rgba(0,0,0,0.05)]';
+      : 'theme-icon-button hover:text-[color:var(--foreground)]';
 
   return (
     <button
