@@ -290,9 +290,9 @@ export function MemberProfile({ member, onBack }: MemberProfileProps) {
         <div className="h-px bg-gradient-to-r from-slate-800 via-slate-600 to-slate-800 my-10 w-full" />
 
         {/* Content - aligned with header */}
-        <div>
-          <div className="markdown-custom-wrapper">
-            <div className="markdown-body p-0 bg-transparent text-gray-300">
+        <div className="overflow-x-hidden">
+          <div className="markdown-custom-wrapper w-full">
+            <div className="markdown-body p-0 bg-transparent text-gray-300 max-w-none">
                 <ReactMarkdown 
                   remarkPlugins={[remarkGfm]}
                   rehypePlugins={[rehypeRaw]}

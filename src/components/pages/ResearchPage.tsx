@@ -1,10 +1,13 @@
 import { useLanguage } from '../LanguageContext';
 import { useRouter } from '../Router';
 import { BackButton } from '../BackButton';
-import { ImageWithFallback } from '../figma/ImageWithFallback';
 import { useState, useEffect, useCallback } from 'react';
 import { loadResearchAreas, ResearchArea } from '../../utils/researchLoader';
-import { ChevronRight, Users, Tag } from 'lucide-react';
+import { loadAllAuthors, AuthorData } from '../../utils/authorLoader';
+import { Users, Tag } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 
 // Load Noto Serif SC for elegant Chinese rendering
 const FONT_LINK_ID = 'noto-serif-sc-link';
@@ -25,15 +28,20 @@ export function ResearchPage() {
   const [error, setError] = useState<string | null>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [animating, setAnimating] = useState(false);
+  const [authors, setAuthors] = useState<AuthorData[]>([]);
 
   useEffect(() => {
     const loadData = async () => {
       try {
         setLoading(true);
-        const data = await loadResearchAreas();
-        setAreas(data);
+        const [areasData, authorsData] = await Promise.all([
+          loadResearchAreas(),
+          loadAllAuthors(),
+        ]);
+        setAreas(areasData);
+        setAuthors(authorsData);
       } catch (err) {
-        console.error('Error loading research areas:', err);
+        console.error('Error loading research data:', err);
         setError('Failed to load research areas');
       } finally {
         setLoading(false);
@@ -53,18 +61,22 @@ export function ResearchPage() {
   }, [activeIndex]);
 
   const handleMemberClick = useCallback((slug: string) => {
-    navigateTo('team');
-    // Allow page transition, then scroll to member
-    setTimeout(() => {
-      const el = document.getElementById(`member-${slug}`);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        // Optional: add a temporary highlight class if defined in CSS
-        el.classList.add('ring-2', 'ring-primary', 'ring-offset-2');
-        setTimeout(() => el.classList.remove('ring-2', 'ring-primary', 'ring-offset-2'), 2000);
-      }
-    }, 100);
-  }, [navigateTo]);
+    const author = authors.find(
+      (a) => a.id.toLowerCase() === slug.toLowerCase()
+    );
+    if (author) {
+      navigateTo('member-profile', author);
+    } else {
+      // Fallback: navigate to team page and scroll to member
+      navigateTo('team');
+      setTimeout(() => {
+        const el = document.getElementById(`member-${slug}`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+    }
+  }, [navigateTo, authors]);
 
   if (loading) {
     return (
@@ -164,13 +176,6 @@ export function ResearchPage() {
                       isActive ? 'bg-white/10' : 'hover:bg-white/5'
                     }`}
                   >
-                    <div
-                      className="w-1 h-10 rounded-full flex-shrink-0 transition-all duration-300"
-                      style={{
-                        background: isActive ? area.meta.color : 'rgba(255,255,255,0.1)',
-                        boxShadow: isActive ? `0 0 12px ${area.meta.color}80` : 'none',
-                      }}
-                    />
                     <div className="flex-1 min-w-0">
                       <p
                         className={`text-sm font-semibold transition-colors duration-200 ${
@@ -180,6 +185,9 @@ export function ResearchPage() {
                         {language === 'zh' ? area.meta.title_zh : area.meta.title}
                       </p>
                     </div>
+                    {isActive && (
+                      <div className="w-1.5 h-1.5 rounded-full bg-white/60 flex-shrink-0" />
+                    )}
                   </button>
                 );
               })}
@@ -207,7 +215,7 @@ export function ResearchPage() {
                   imageLoaded ? 'opacity-100' : 'opacity-0'
                 }`}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1e] via-transparent to-transparent opacity-80" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1c1c1f] via-transparent to-transparent opacity-80" />
               <div className="absolute bottom-0 left-0 right-0 p-10">
                 <h2 className="text-4xl font-bold text-white drop-shadow-lg">
                   {language === 'zh' ? active.meta.title_zh : active.meta.title}
@@ -218,10 +226,12 @@ export function ResearchPage() {
             {/* Content Area */}
             <div className="p-10 space-y-10">
               {/* Description */}
-              <div className="max-w-4xl">
-                <p className="text-lg text-white/70 leading-relaxed font-light">
-                  {language === 'zh' ? active.description.zh : active.description.en}
-                </p>
+              <div className="max-w-4xl markdown-custom-wrapper">
+                <div className="markdown-body p-0 bg-transparent text-white/70">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                    {language === 'zh' ? active.description.zh : active.description.en}
+                  </ReactMarkdown>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -237,12 +247,7 @@ export function ResearchPage() {
                     {active.keywords.map((kw, ki) => (
                       <span
                         key={ki}
-                        className="px-4 py-1.5 rounded-lg text-xs font-medium border transition-colors hover:bg-white/5"
-                        style={{
-                          background: `${active.meta.color}10`,
-                          color: active.meta.color,
-                          borderColor: `${active.meta.color}30`,
-                        }}
+                        className="px-4 py-1.5 rounded-lg text-xs font-medium border border-white/10 bg-white/[0.05] text-white/60 transition-colors hover:bg-white/10 hover:text-white/80"
                       >
                         {language === 'zh' ? kw.zh : kw.en}
                       </span>
@@ -289,20 +294,24 @@ export function ResearchPage() {
                   <h2 className="text-xl font-bold text-white mb-4">
                     {language === 'zh' ? area.meta.title_zh : area.meta.title}
                   </h2>
-                  <p className="text-white/60 text-sm leading-relaxed mb-6">
-                    {language === 'zh' ? area.description.zh : area.description.en}
-                  </p>
+                  <div className="text-white/60 text-sm leading-relaxed mb-6 markdown-custom-wrapper">
+                    <div className="markdown-body p-0 bg-transparent text-white/60">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                        {language === 'zh' ? area.description.zh : area.description.en}
+                      </ReactMarkdown>
+                    </div>
+                  </div>
                   {/* Mobile Keywords */}
                   <div className="mb-6">
                     <div className="flex items-center gap-2 mb-3">
-                      <div className="w-1 h-3 bg-white/20 rounded-full" />
+                      <Tag className="h-3 w-3 text-white/20" />
                       <span className="text-[10px] font-bold tracking-widest text-white/30 uppercase">
                         {language === 'zh' ? '关键词' : 'Keywords'}
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {area.keywords.map((kw, ki) => (
-                        <span key={ki} className="text-[10px] px-2 py-1 rounded border border-white/10 text-white/40">
+                        <span key={ki} className="text-[10px] px-2 py-1 rounded border border-white/10 bg-white/[0.05] text-white/50">
                           {language === 'zh' ? kw.zh : kw.en}
                         </span>
                       ))}
@@ -312,7 +321,7 @@ export function ResearchPage() {
                   {/* Mobile Members */}
                   <div>
                     <div className="flex items-center gap-2 mb-3">
-                      <div className="w-1 h-3 bg-white/20 rounded-full" />
+                      <Users className="h-3 w-3 text-white/20" />
                       <span className="text-[10px] font-bold tracking-widest text-white/30 uppercase">
                         {language === 'zh' ? '相关实验室成员' : 'Related Lab Members'}
                       </span>

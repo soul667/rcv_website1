@@ -1,6 +1,6 @@
 import matter from 'gray-matter';
 
-interface AuthorData {
+export interface AuthorData {
   id: string;
   name: string;
   nameEn: string;

@@ -221,7 +221,7 @@ export function TeamMembers({ onMemberClick, sectionClassName = 'py-20 bg-slate-
 
             {/* Slide Indicators */}
             {teamCarouselConfig.showIndicators && teamCarouselConfig.slides.length > 1 && (
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20">
+              <div className="hidden md:flex absolute bottom-4 left-1/2 transform -translate-x-1/2 space-x-3 z-20">
                 <div className="backdrop-blur-xl bg-white/10 border border-white/30 rounded-full px-6 py-3 shadow-lg">
                   <div className="flex space-x-3">
                     {teamCarouselConfig.slides.map((_, index) => (

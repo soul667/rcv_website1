@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ImageWithFallback } from './figma/ImageWithFallback';
@@ -200,20 +200,6 @@ export function Hero() {
         </div>
       )}
 
-      {/* Scroll Down Indicator */}
-      <div className="absolute bottom-4 right-4 z-20">
-        <button
-          onClick={scrollToNextSection}
-          className="group flex flex-col items-center text-white hover:text-gray-300 transition-all duration-300"
-        >
-          <div className="backdrop-blur-xl bg-white/10 border border-white/30 rounded-full p-3 shadow-lg hover:bg-white/20 hover:scale-110 transition-all duration-300">
-            <ChevronDown className="h-6 w-6 animate-bounce" />
-          </div>
-          <span className="text-sm mt-2 opacity-70 group-hover:opacity-100 transition-opacity">
-            {language === 'zh' ? '向下滚动' : 'Scroll Down'}
-          </span>
-        </button>
-      </div>
     </section>
   );
 }
