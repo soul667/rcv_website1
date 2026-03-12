@@ -36,6 +36,7 @@ interface MemberProfileProps {
     }[];
   };
   onBack: () => void;
+  previousPage?: string | null;
 }
 
 // YouTube Shortcode Component
@@ -152,13 +153,17 @@ const normalizeSocialLinks = (social: Array<Partial<SocialLink>> = []): SocialLi
     }));
 };
 
-export function MemberProfile({ member, onBack }: MemberProfileProps) {
+export function MemberProfile({ member, onBack, previousPage }: MemberProfileProps) {
   const { language, t } = useLanguage();
   const { navigateTo } = useRouter();
   const [resolvedSocialLinks, setResolvedSocialLinks] = useState<SocialLink[]>(() => normalizeSocialLinks(member.social));
 
   const handleBack = () => {
-    navigateTo('team');
+    if (previousPage === 'research') {
+      navigateTo('research');
+    } else {
+      navigateTo('team');
+    }
   };
 
   const getSocialIcon = (iconName: string) => {
@@ -230,7 +235,10 @@ export function MemberProfile({ member, onBack }: MemberProfileProps) {
 
   return (
     <div className="min-h-screen bg-slate-900 py-20">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div
+        className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"
+        style={{ paddingLeft: 'max(1rem, 2em)', paddingRight: 'max(1rem, 2em)' }}
+      >
         {/* Back Button */}
         <BackButton onClick={handleBack} label={t('team.backToTeam')} />
 
@@ -318,7 +326,7 @@ export function MemberProfile({ member, onBack }: MemberProfileProps) {
                       
                       return (
                         <div className="my-6 flex flex-col items-center justify-center w-full" style={{ textAlign: 'center' }}>
-                          <img 
+                          <ImageWithFallback 
                             src={imageSrc} 
                             alt={alt || 'Research image'} 
                             className="rounded-lg shadow-lg"

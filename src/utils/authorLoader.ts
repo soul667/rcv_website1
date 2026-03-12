@@ -394,14 +394,12 @@ export async function loadAllAuthors(): Promise<AuthorData[]> {
     'Yanci_wen', 'Yicheng_He', 'Yu_Zhan', 'Yufan_Mao', 'Zanjia_Tong'
   ];
   
-  const authors: AuthorData[] = [];
+  // Load all authors in parallel instead of sequentially
+  const results = await Promise.all(
+    authorDirs.map(authorId => loadAuthorData(authorId))
+  );
   
-  for (const authorId of authorDirs) {
-    const authorData = await loadAuthorData(authorId);
-    if (authorData) {
-      authors.push(authorData);
-    }
-  }
+  const authors = results.filter((a): a is AuthorData => a !== null);
   
   // Sort by weight (lower weight = higher priority)
   return authors.sort((a, b) => (a.weight || 999) - (b.weight || 999));

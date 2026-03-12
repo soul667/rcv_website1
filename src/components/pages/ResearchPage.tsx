@@ -1,6 +1,7 @@
 import { useLanguage } from '../LanguageContext';
 import { useRouter } from '../Router';
 import { BackButton } from '../BackButton';
+import { ImageWithFallback } from '../figma/ImageWithFallback';
 import { useState, useEffect, useCallback } from 'react';
 import { loadResearchAreas, ResearchArea } from '../../utils/researchLoader';
 import { loadAllAuthors, AuthorData } from '../../utils/authorLoader';
@@ -73,6 +74,12 @@ export function ResearchPage() {
         const el = document.getElementById(`member-${slug}`);
         if (el) {
           el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          // If not found in active members, scroll to alumni section
+          const alumniEl = document.getElementById('alumni-section');
+          if (alumniEl) {
+            alumniEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
         }
       }, 100);
     }
@@ -114,16 +121,9 @@ export function ResearchPage() {
         backgroundColor: '#1c1c1f',
       }}
     >
-      {/* Ambient glow */}
-      <div
-        className="absolute inset-0 opacity-[0.07] pointer-events-none transition-all duration-700"
-        style={{
-          background: `radial-gradient(ellipse 60% 50% at 75% 40%, ${active.meta.color} 0%, transparent 70%)`,
-        }}
-      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <BackButton onClick={() => navigateTo('home')} className="mb-8 hover:bg-white/10 text-white/70 hover:text-white border-white/10 transition-all" />
+        <BackButton onClick={() => navigateTo('home')} className="md:hidden mb-8 hover:bg-white/10 text-white/70 hover:text-white border-white/10 transition-all" />
 
         {/* Page Header */}
         <div className="text-center mb-16 select-none">
@@ -172,22 +172,24 @@ export function ResearchPage() {
                   <button
                     key={i}
                     onClick={() => handleTabChange(i)}
-                    className={`w-full text-left px-6 py-5 transition-all duration-300 flex items-center gap-4 group border-b border-white/5 last:border-b-0 ${
-                      isActive ? 'bg-white/10' : 'hover:bg-white/5'
+                    className={`relative w-full text-left px-6 py-5 transition-all duration-300 flex items-center justify-between group border-b border-white/5 last:border-b-0 overflow-hidden ${
+                      isActive 
+                        ? 'bg-white/10 shadow-[inset_2px_0_0_0_rgba(255,255,255,0.8)]' 
+                        : 'hover:bg-white/5 hover:translate-x-1'
                     }`}
                   >
-                    <div className="flex-1 min-w-0">
+                    {isActive && (
+                      <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#CB743B] shadow-[0_0_10px_rgba(203,116,59,0.5)]" />
+                    )}
+                    <div className="flex-1 min-w-0 z-10">
                       <p
                         className={`text-sm font-semibold transition-colors duration-200 ${
-                          isActive ? 'text-white' : 'text-white/40 group-hover:text-white/70'
+                          isActive ? 'text-white' : 'text-white/40 group-hover:text-white/80'
                         }`}
                       >
                         {language === 'zh' ? area.meta.title_zh : area.meta.title}
                       </p>
                     </div>
-                    {isActive && (
-                      <div className="w-1.5 h-1.5 rounded-full bg-white/60 flex-shrink-0" />
-                    )}
                   </button>
                 );
               })}
@@ -207,13 +209,10 @@ export function ResearchPage() {
           >
             {/* Header / Image Area */}
             <div className="relative h-[400px] overflow-hidden">
-              <img
+              <ImageWithFallback
                 src={active.meta.image}
                 alt={active.meta.title}
-                onLoad={() => setImageLoaded(true)}
-                className={`w-full h-full object-cover transition-opacity duration-700 ${
-                  imageLoaded ? 'opacity-100' : 'opacity-0'
-                }`}
+                className="w-full h-full rounded-none"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#1c1c1f] via-transparent to-transparent opacity-80" />
               <div className="absolute bottom-0 left-0 right-0 p-10">
@@ -238,8 +237,8 @@ export function ResearchPage() {
                 {/* Keywords */}
                 <div>
                   <div className="flex items-center gap-2 mb-4">
-                    <Tag className="h-4 w-4 text-white/30" />
-                    <span className="text-xs font-bold tracking-[0.2em] text-white/30 uppercase">
+                    <Tag className="h-4 w-4 text-[#CB743B]/60" />
+                    <span className="text-lg font-semibold tracking-wider text-white/80">
                       {language === 'zh' ? '领域关键词' : 'Keywords'}
                     </span>
                   </div>
@@ -258,8 +257,8 @@ export function ResearchPage() {
                 {/* Team Members */}
                 <div>
                   <div className="flex items-center gap-2 mb-4">
-                    <Users className="h-4 w-4 text-white/30" />
-                    <span className="text-xs font-bold tracking-[0.2em] text-white/30 uppercase">
+                    <Users className="h-4 w-4 text-[#CB743B]/60" />
+                    <span className="text-lg font-semibold tracking-wider text-white/80">
                       {language === 'zh' ? '相关实验室成员' : 'Related Lab Members'}
                     </span>
                   </div>
@@ -289,7 +288,7 @@ export function ResearchPage() {
                className="rounded-2xl overflow-hidden border border-white/10"
                style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)' }}
              >
-                <img src={area.meta.image} alt={area.meta.title} className="w-full h-56 object-cover" />
+                <ImageWithFallback src={area.meta.image} alt={area.meta.title} className="w-full h-56" />
                 <div className="p-6">
                   <h2 className="text-xl font-bold text-white mb-4">
                     {language === 'zh' ? area.meta.title_zh : area.meta.title}
@@ -304,14 +303,14 @@ export function ResearchPage() {
                   {/* Mobile Keywords */}
                   <div className="mb-6">
                     <div className="flex items-center gap-2 mb-3">
-                      <Tag className="h-3 w-3 text-white/20" />
-                      <span className="text-[10px] font-bold tracking-widest text-white/30 uppercase">
+                      <Tag className="h-4 w-4 text-[#CB743B]/80" />
+                      <span className="text-base font-semibold tracking-wider text-white/80">
                         {language === 'zh' ? '关键词' : 'Keywords'}
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {area.keywords.map((kw, ki) => (
-                        <span key={ki} className="text-[10px] px-2 py-1 rounded border border-white/10 bg-white/[0.05] text-white/50">
+                        <span key={ki} className="text-xs px-3 py-1.5 rounded-lg border border-white/20 bg-white/10 text-white/80 backdrop-blur-sm shadow-sm">
                           {language === 'zh' ? kw.zh : kw.en}
                         </span>
                       ))}
@@ -321,8 +320,8 @@ export function ResearchPage() {
                   {/* Mobile Members */}
                   <div>
                     <div className="flex items-center gap-2 mb-3">
-                      <Users className="h-3 w-3 text-white/20" />
-                      <span className="text-[10px] font-bold tracking-widest text-white/30 uppercase">
+                      <Users className="h-4 w-4 text-[#CB743B]/80" />
+                      <span className="text-base font-semibold tracking-wider text-white/80">
                         {language === 'zh' ? '相关实验室成员' : 'Related Lab Members'}
                       </span>
                     </div>

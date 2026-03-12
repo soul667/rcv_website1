@@ -10,7 +10,7 @@ import { TeamPage } from './components/pages/TeamPage';
 import { MemberProfile } from './components/MemberProfile';
 
 function AppContent() {
-  const { currentPage, pageData } = useRouter();
+  const { currentPage, pageData, previousPage } = useRouter();
 
   const renderPage = () => {
     switch (currentPage) {
@@ -23,7 +23,7 @@ function AppContent() {
       case 'team':
         return <TeamPage />;
       case 'member-profile':
-        return <MemberProfile member={pageData} onBack={() => {}} />;
+        return <MemberProfile member={pageData} onBack={() => {}} previousPage={previousPage} />;
       default:
         return <HomePage />;
     }
